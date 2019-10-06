@@ -1,0 +1,12 @@
+{
+    "name": "Server Developement",
+    "database": "mongodb://localhost:27017/development",
+    "port": 3000,
+    "ghn": {
+        "domain": "https://dev-online-gateway.ghn.vn",
+        "price_url": "/apiv3-api/api/v1/apiv3/CalculateFee",
+        "username": "giaovan@kiotviet.com",
+        "password": "Giaovan@321",
+        "token":"TokenStaging"
+    }
+}
