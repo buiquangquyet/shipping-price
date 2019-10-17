@@ -47,18 +47,24 @@ function ghnController() {
   return {
     getPrice: async (req, res) => {
         let services = req.body.services
-        req.body.token = self.INFO_DELIVERY.token;
-
         let result = []
-        await Promise.all(
-          services.map(service => {
-            let dataRequest = JSON.parse(JSON.stringify(req.body))
-            dataRequest.ServiceID = service
-            return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
-              if (dataCache.s == 200) {
-                dataCache.data.serviceId = service
-                result.push(dataCache.data)
-              } else {
+        try {
+          await Promise.all(
+            services.map(service => {
+              let dataRequest = JSON.parse(JSON.stringify(req.body))
+              dataRequest.ServiceID = parseInt(service)
+              dataRequest.FromDistrictID = parseInt(dataRequest.FromDistrictID)
+              dataRequest.ToDistrictID = parseInt(dataRequest.ToDistrictID)
+              dataRequest.Weight = parseInt(dataRequest.Weight)
+              dataRequest.Length = parseInt(dataRequest.Length)
+              dataRequest.Width = parseInt(dataRequest.Width)
+              dataRequest.Height = parseInt(dataRequest.Height)
+
+              return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
+                if (dataCache.s == 200) {
+                  dataCache.data.serviceId = service
+                  result.push(dataCache.data)
+                } else {
                   return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest).then(response => {
                     let data = response.data.data
                     data.serviceId = service
@@ -69,11 +75,15 @@ function ghnController() {
                     data.serviceId = service
                     result.push(data)
                   })
-              }
+                }
+              })
             })
-          })
-        )
-        return res.json({s: 200, data: result})
+          )
+          return res.json({s: 200, data: result})
+        } catch (e) {
+          return res.json({s: 400, data: e.message})
+        }
+
     }
   }
 }
