@@ -68,8 +68,8 @@ function ghnController() {
                   return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest).then(response => {
                     let data = response.data.data
                     data.serviceId = service
-                    result.push(data)
-                    self.setPriceTocache(req, res, dataRequest, data.data)
+                    result.push(response.data)
+                    self.setPriceTocache(req, res, dataRequest, response.data)
                   }).catch(error => {
                     let data = error.response.data
                     data.serviceId = service
@@ -83,7 +83,6 @@ function ghnController() {
         } catch (e) {
           return res.json({s: 400, data: e.message})
         }
-
     }
   }
 }

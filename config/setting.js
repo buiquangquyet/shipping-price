@@ -11,9 +11,10 @@ let SETTING = {
     GHN: {
       "domain": "https://dev-online-gateway.ghn.vn",
       "price_url": "/apiv3-api/api/v1/apiv3/CalculateFee",
-      // "username": "giaovan@kiotviet.com",
-      // "password": "Giaovan@321",
-      // "token":"TokenStaging"
+    },
+    VTP: {
+      "domain": "https://partner.viettelpost.vn",
+      "price_url": "/v2/order/getPrice",
     }
   }
 }

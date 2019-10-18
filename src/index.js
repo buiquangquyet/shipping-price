@@ -25,7 +25,7 @@ const corsOptions = {
 const cors = require('cors');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use('/api/v1', home);
 app.use('/', (req, res) => {
