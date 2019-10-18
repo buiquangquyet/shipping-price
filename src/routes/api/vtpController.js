@@ -6,8 +6,8 @@ function vtpController() {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.VTP : Setting.LOCAL.VTP,
 
     getPriceFromCache: (req, res, dataRequest) => {
-      let keyCache = 'VTP_' + dataRequest.ServiceID + '_' + dataRequest.FromDistrictID + '_' + dataRequest.ToDistrictID + '_'
-        + dataRequest.Weight  +  '_' + dataRequest.Length + '_' + dataRequest.Width + '_' + dataRequest.Height
+      let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
+        + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
 
       let checkRequest = dataRequest.CouponCode || dataRequest.InsuranceFee ? false : true
       return new Promise((resolve, reject) => {
@@ -36,8 +36,8 @@ function vtpController() {
     setPriceTocache: (req, res, dataRequest, data) => {
       let checkRequest = dataRequest.CouponCode || dataRequest.InsuranceFee ? false : true
       if (!checkRequest) {
-        let keyCache = 'VTP_' + dataRequest.ServiceID + '_' + dataRequest.FromDistrictID + '_' + dataRequest.ToDistrictID + '_'
-          + dataRequest.Weight  +  '_' + dataRequest.Length + '_' + dataRequest.Width + '_' + dataRequest.Height
+        let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
+          + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
 
         clientRedis.setex(keyCache, 300, JSON.stringify(data))
       }
