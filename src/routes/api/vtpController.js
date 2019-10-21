@@ -9,7 +9,7 @@ function vtpController() {
       let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
         + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
 
-      let checkRequest = dataRequest.CouponCode || dataRequest.InsuranceFee ? false : true
+      let checkRequest = dataRequest.ORDER_SERVICE_ADD ? false : true
       return new Promise((resolve, reject) => {
         if (!checkRequest) {
           return resolve({
@@ -34,8 +34,8 @@ function vtpController() {
     },
 
     setPriceTocache: (req, res, dataRequest, data) => {
-      let checkRequest = dataRequest.CouponCode || dataRequest.InsuranceFee ? false : true
-      if (!checkRequest) {
+      let checkRequest = dataRequest.ORDER_SERVICE_ADD ? false : true
+      if (checkRequest) {
         let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
           + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
 
@@ -59,14 +59,11 @@ function vtpController() {
                 dataCache.data.serviceId = service
                 result.push(dataCache.data)
               } else {
-                return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest, {
-                  headers : {
-                    'Token': dataRequest.token
-                  }
-                }).then(response => {
+                return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest, {headers : {'Token': dataRequest.token}}
+                ).then(response => {
                   response.data.data.serviceId = service
                   result.push(response.data)
-                  if (response.data.error) {
+                  if (!response.data.error) {
                     self.setPriceTocache(req, res, dataRequest, response.data)
                   }
                 }).catch(error => {
@@ -80,6 +77,7 @@ function vtpController() {
         )
         return res.json({s: 200, data: result})
       } catch (e) {
+        console.log(e)
         return res.json({s: 400, data: e.message})
       }
     }

@@ -35,7 +35,7 @@ function ghnController() {
 
     setPriceTocache: (req, res, dataRequest, data) => {
       let checkRequest = dataRequest.CouponCode || dataRequest.InsuranceFee ? false : true
-      if (!checkRequest) {
+      if (checkRequest) {
         let keyCache = 'GHN_' + dataRequest.ServiceID + '_' + dataRequest.FromDistrictID + '_' + dataRequest.ToDistrictID + '_'
           + dataRequest.Weight  +  '_' + dataRequest.Length + '_' + dataRequest.Width + '_' + dataRequest.Height
 
@@ -66,8 +66,7 @@ function ghnController() {
                   result.push(dataCache.data)
                 } else {
                   return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest).then(response => {
-                    let data = response.data.data
-                    data.serviceId = service
+                    response.data.data.serviceId = service
                     result.push(response.data)
                     self.setPriceTocache(req, res, dataRequest, response.data)
                   }).catch(error => {

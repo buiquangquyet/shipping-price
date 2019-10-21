@@ -19,6 +19,11 @@ let SETTING = {
     GHTK: {
       "domain": "https://dev.ghtk.vn",
       "price_url": "/services/shipment/fee",
+    },
+    SPL: {
+      "domain": "http://staging.partner.speedlink.vn/Partner",
+      "price_url": "/checkTransportationFee",
+      "api_key": "F55EDDE2C35BA331A0C91D4960AE6C057BA84EF5"
     }
   }
 }
