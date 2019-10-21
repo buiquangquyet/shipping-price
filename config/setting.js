@@ -15,6 +15,10 @@ let SETTING = {
     VTP: {
       "domain": "https://partner.viettelpost.vn",
       "price_url": "/v2/order/getPrice",
+    },
+    GHTK: {
+      "domain": "https://dev.ghtk.vn",
+      "price_url": "/services/shipment/fee",
     }
   }
 }
