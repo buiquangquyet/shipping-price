@@ -57,12 +57,13 @@ function ghtkController() {
   return {
     getPrice: async (req, res) => {
       let services = req.body.services
-      let dataRequest = JSON.parse(JSON.stringify(req.body))
+      let dataRequest = JSON.parse(JSON.stringify(req.body.data))
 
       return Promise.all(
         services.map(service => {
           dataRequest.ORDER_SERVICE = service[0]
           dataRequest.transport = service[1]
+          dataRequest.token = req.body.token
 
           return self.getPriceFromCache(req, res, dataRequest)
             .then(result => {

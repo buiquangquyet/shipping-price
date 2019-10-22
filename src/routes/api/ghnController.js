@@ -54,7 +54,7 @@ function ghnController() {
       }
     },
 
-    prepareDataToDelivery: (dataRequest, service) => {
+    prepareDataToDelivery: (dataRequest, service, token) => {
       return {
         ServiceID: parseInt(service),
         FromDistrictID: parseInt(dataRequest.FromDistrictID),
@@ -65,7 +65,7 @@ function ghnController() {
         Height: parseInt(dataRequest.Height),
         CouponCode: dataRequest.CouponCode,
         InsuranceFee: dataRequest.InsuranceFee ? parseInt(dataRequest.InsuranceFee) : 0,
-        token: dataRequest.token
+        token: token
       }
     }
   };
@@ -73,11 +73,11 @@ function ghnController() {
   return {
     getPrice: async (req, res) => {
       let services = req.body.services
-      let dataRequest = JSON.parse(JSON.stringify(req.body))
+      let dataRequest = JSON.parse(JSON.stringify(req.body.data))
 
       return Promise.all(
         services.map(service => {
-          let dataDelivery = self.prepareDataToDelivery(dataRequest, service)
+          let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
 
           return self.getPriceFromCache(req, res, dataDelivery)
             .then(result => {

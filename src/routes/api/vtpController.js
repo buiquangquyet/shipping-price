@@ -59,8 +59,9 @@ function vtpController() {
 
       return Promise.all(
         services.map(service => {
-          let dataDelivery = JSON.parse(JSON.stringify(req.body))
+          let dataDelivery = JSON.parse(JSON.stringify(req.body.data))
           dataDelivery.ORDER_SERVICE = service
+          dataDelivery.token = req.body.token
 
           return self.getPriceFromCache(req, res, dataDelivery)
             .then(result => {

@@ -86,12 +86,10 @@ function splController() {
   return {
     getPrice: async (req, res) => {
       let services = req.body.services
-      let result = []
-
 
       return Promise.all(
         services.map(service => {
-          let dataRequest = JSON.parse(JSON.stringify(req.body))
+          let dataRequest = JSON.parse(JSON.stringify(req.body.data))
           dataRequest.data.service = service
           let dataDelivery = self.prepareDataToDelivery(dataRequest)
           return self.getPriceFromCache(req, res, dataDelivery)
