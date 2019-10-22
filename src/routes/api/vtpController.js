@@ -1,84 +1,93 @@
 const Setting = require('../../../config/setting')
 const axios = require('axios')
+const ClientService = require('../util/clientService')
 
 function vtpController() {
   const self = {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.VTP : Setting.LOCAL.VTP,
 
     getPriceFromCache: (req, res, dataRequest) => {
-      let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
-        + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
+      let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE,
+        dataRequest.RECEIVER_DISTRICT + '_' + dataRequest.RECEIVER_PROVINCE, dataRequest.PRODUCT_WEIGHT)
 
-      let checkRequest = dataRequest.ORDER_SERVICE_ADD ? false : true
+      let checkRequest = !(dataRequest.ORDER_SERVICE_ADD)
       return new Promise((resolve, reject) => {
         if (!checkRequest) {
           return resolve({
+            s: 500, data: null
+          })
+        }
+        return clientRedis.get(keyCache, (err, data) => {
+          if (data) {
+            return resolve({
+              s: 200, data: JSON.parse(data)
+            })
+          }
+          return resolve({
             s: 400, data: null
           })
-        } else {
-          return clientRedis.get(keyCache, (err, data) => {
-            if (data) {
-              return resolve({
-                s: 200, data: JSON.parse(data)
-              })
-            } else {
-              return resolve({
-                s: 400, data: null
-              })
-            }
-
-          });
-        }
+        });
       })
     },
 
-    setPriceTocache: (req, res, dataRequest, data) => {
-      let checkRequest = dataRequest.ORDER_SERVICE_ADD ? false : true
+    setPriceToCache: (req, res, dataRequest, data) => {
+      let checkRequest = !(dataRequest.ORDER_SERVICE_ADD)
       if (checkRequest) {
-        let keyCache = 'VTP_' + dataRequest.ORDER_SERVICE + '_' + dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE + '_' + dataRequest.RECEIVER_DISTRICT
-          + '_' + dataRequest.RECEIVER_PROVINCE + '_' + dataRequest.PRODUCT_WEIGHT
-
+        let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.data.serviceId, dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE,
+          dataRequest.RECEIVER_DISTRICT + '_' + dataRequest.RECEIVER_PROVINCE, dataRequest.PRODUCT_WEIGHT)
         clientRedis.setex(keyCache, 300, JSON.stringify(data))
       }
-    }
+    },
+
+    getPriceFromDelivery: (req, res, dataDelivery) => {
+      return new Promise((resolve, reject) => {
+        return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataDelivery, {headers: {'Token': dataDelivery.token}}
+        ).then(response => {
+          response.data.data.serviceId = dataDelivery.ORDER_SERVICE
+          return resolve(response.data)
+        }).catch(error => {
+          let data = error.response.data
+          data.serviceId = dataDelivery.ORDER_SERVICE
+          return resolve(data)
+        })
+      })
+    },
   }
   return {
     getPrice: async (req, res) => {
       let services = req.body.services
-      let result = []
 
-      try {
-        await Promise.all(
-          services.map(service => {
-            let dataRequest = JSON.parse(JSON.stringify(req.body))
-            dataRequest.ORDER_SERVICE = service
+      return Promise.all(
+        services.map(service => {
+          let dataDelivery = JSON.parse(JSON.stringify(req.body))
+          dataDelivery.ORDER_SERVICE = service
 
-            return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
-              if (dataCache.s == 200) {
-                dataCache.data.serviceId = service
-                result.push(dataCache.data)
-              } else {
-                return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest, {headers : {'Token': dataRequest.token}}
-                ).then(response => {
-                  response.data.data.serviceId = service
-                  result.push(response.data)
-                  if (!response.data.error) {
-                    self.setPriceTocache(req, res, dataRequest, response.data)
-                  }
-                }).catch(error => {
-                  let data = error.response.data
-                  data.serviceId = service
-                  result.push(data)
-                })
+          return self.getPriceFromCache(req, res, dataDelivery)
+            .then(result => {
+              if (result.s === 200) {
+                return result.data
               }
+              return null
+            }).then(resultCache => {
+              if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
+                return self.getPriceFromDelivery(req, res, dataDelivery)
+              }
+
+              return resultCache
             })
-          })
-        )
-        return res.json({s: 200, data: result})
-      } catch (e) {
-        console.log(e)
-        return res.json({s: 400, data: e.message})
-      }
+        })
+      ).then(results => {
+        results.map(result => {
+          // nếu thành công thì ghi vào log
+          if (!result.error) {
+            self.setPriceToCache(req, res, req.body, result)
+          }
+        })
+
+        return res.json({s: 200, data: results})
+      }).catch(error => {
+        return res.json({s: 500, data: error.message})
+      })
     }
   }
 }
