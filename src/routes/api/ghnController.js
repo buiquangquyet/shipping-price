@@ -41,6 +41,21 @@ function ghnController() {
 
         clientRedis.setex(keyCache, 300, JSON.stringify(data))
       }
+    },
+
+    prepareDataToDelivery: (dataRequest, service) => {
+      return {
+        ServiceID: parseInt(service),
+        FromDistrictID: parseInt(dataRequest.FromDistrictID),
+        ToDistrictID: parseInt(dataRequest.ToDistrictID),
+        Weight: parseInt(dataRequest.Weight),
+        Length: parseInt(dataRequest.Length),
+        Width: parseInt(dataRequest.Width),
+        Height: parseInt(dataRequest.Height),
+        CouponCode: dataRequest.CouponCode,
+        InsuranceFee: dataRequest.InsuranceFee ? parseInt(dataRequest.InsuranceFee) : 0,
+        token: dataRequest.token
+      }
     }
   };
 
@@ -52,20 +67,14 @@ function ghnController() {
           await Promise.all(
             services.map(service => {
               let dataRequest = JSON.parse(JSON.stringify(req.body))
-              dataRequest.ServiceID = parseInt(service)
-              dataRequest.FromDistrictID = parseInt(dataRequest.FromDistrictID)
-              dataRequest.ToDistrictID = parseInt(dataRequest.ToDistrictID)
-              dataRequest.Weight = parseInt(dataRequest.Weight)
-              dataRequest.Length = parseInt(dataRequest.Length)
-              dataRequest.Width = parseInt(dataRequest.Width)
-              dataRequest.Height = parseInt(dataRequest.Height)
+              let dataDelivery = self.prepareDataToDelivery(dataRequest, service)
 
-              return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
+              return self.getPriceFromCache(req, res, dataDelivery).then(dataCache => {
                 if (dataCache.s == 200) {
                   dataCache.data.serviceId = service
                   result.push(dataCache.data)
                 } else {
-                  return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataRequest).then(response => {
+                  return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataDelivery).then(response => {
                     response.data.data.serviceId = service
                     result.push(response.data)
                     self.setPriceTocache(req, res, dataRequest, response.data)

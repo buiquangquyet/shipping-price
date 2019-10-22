@@ -49,6 +49,16 @@ function splController() {
       var hmac = crypto.createHmac('sha1', string)
       let signed = hmac.update('SPEEDLINK').digest("hex");
       return signed
+    },
+
+    prepareDataToDelivery: (dataRequest, service) => {
+      dataRequest.data.service = service
+
+      return {
+        api_key: dataRequest.api_key,
+        timestamp: Math.floor(Date.now() / 1000),
+        data: dataRequest.data,
+      }
     }
 
   }
@@ -61,20 +71,12 @@ function splController() {
         await Promise.all(
           services.map(service => {
             let dataRequest = JSON.parse(JSON.stringify(req.body))
-            dataRequest.data.service = service
-
-            let dataToDelivery = {
-              api_key: dataRequest.api_key,
-              timestamp: Math.floor(Date.now() / 1000),
-              data: dataRequest.data,
-            }
-
+            let dataToDelivery = self.prepareDataToDelivery(dataRequest, service)
             return self.getPriceFromCache(req, res, dataToDelivery.data).then(dataCache => {
               if (dataCache.s == 200) {
                 dataCache.data.serviceId = service
                 result.push(dataCache.data)
               } else {
-                console.log(dataToDelivery)
                 return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url,
                   dataToDelivery,
                   {
@@ -84,9 +86,8 @@ function splController() {
                     }
                   }
                 ).then(response => {
-                  console.log(response.config)
                   if (response.data.error_code == 1) {
-                    response.data.data.serviceId = service
+                    response.data.data[0].serviceId = service
                     self.setPriceToCache(req, res, dataRequest, response.data)
                   } else {
                     response.data.serviceId = service

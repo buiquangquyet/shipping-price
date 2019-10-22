@@ -46,7 +46,6 @@ function ghtkController() {
         await Promise.all(
           services.map(service => {
             let dataRequest = JSON.parse(JSON.stringify(req.body))
-            dataRequest.ORDER_SERVICE = service[0]
             dataRequest.transport = service[1]
 
             return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
