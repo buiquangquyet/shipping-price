@@ -85,9 +85,7 @@ function splController() {
   }
   return {
     getPrice: async (req, res) => {
-      console.log('abc', req.body)
       let services = req.body.services
-      console.log('services', services)
       return Promise.all(
         services.map(service => {
           console.log('service', service)
