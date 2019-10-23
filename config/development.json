@@ -2,6 +2,7 @@
     "name": "Server Developement",
     "database": "mongodb://localhost:27017/development",
     "port": 3000,
+    "URL": "",
     "ghn": {
         "domain": "https://dev-online-gateway.ghn.vn",
         "price_url": "/apiv3-api/api/v1/apiv3/CalculateFee",
