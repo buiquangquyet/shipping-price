@@ -9,10 +9,12 @@ const redis = require('redis');
 // connect to Redis
 const REDIS_URL = Setting.IS_PRODUCTION ? Setting.PRODUCTION.REDIS_URL : Setting.LOCAL.REDIS_URL;
 global.clientRedis = redis.createClient(REDIS_URL);
-
+global.checkConnectRedis = false
 clientRedis.on('connect', () => {
+  checkConnectRedis = true
   console.log(`connected to redis`);
 });
+
 clientRedis.on('error', err => {
   console.log(`Error: ${err}`);
 });

@@ -9,9 +9,9 @@ function ghtkController() {
     getPriceFromCache: (req, res, dataRequest) => {
       let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT,
         dataRequest.RECEIVER_DISTRICT, dataRequest.weight)
-      let checkRequest = true
+      let checkRequest = !(dataRequest.value)
       return new Promise((resolve, reject) => {
-        if (!checkRequest) {
+        if (!checkConnectRedis || !checkRequest) {
           return resolve({
             s: 500, data: null
           })
@@ -51,7 +51,11 @@ function ghtkController() {
     setPriceToCache: (req, res, dataRequest, data) => {
       let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.fee.serviceId, dataRequest.SENDER_DISTRICT,
         dataRequest.RECEIVER_DISTRICT, dataRequest.weight)
-      clientRedis.setex(keyCache, 300, JSON.stringify(data))
+
+      let checkRequest = !(dataRequest.value)
+      if (checkConnectRedis && checkRequest) {
+        clientRedis.setex(keyCache, 300, JSON.stringify(data))
+      }
     }
   }
   return {

@@ -14,7 +14,7 @@ function splController() {
 
       let checkRequest = !(dataRequest.coupon_code)
       return new Promise((resolve, reject) => {
-        if (!checkRequest) {
+        if (!checkConnectRedis || !checkRequest) {
           return resolve({
             s: 500, data: null
           })
@@ -36,7 +36,7 @@ function splController() {
     setPriceToCache: (req, res, dataRequest, data) => {
       let checkRequest = !(dataRequest.data.coupon_code)
 
-      if (checkRequest) {
+      if (checkConnectRedis && checkRequest) {
         let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.data[0].serviceId, dataRequest.data.pickup_address_code,
           dataRequest.data.receive_address_code, dataRequest.data.weight, dataRequest.data.length, dataRequest.data.width, dataRequest.data.height)
 

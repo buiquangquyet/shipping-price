@@ -7,13 +7,14 @@ function ghnController() {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.GHN : Setting.LOCAL.GHN,
 
     getPriceFromCache: (req, res, dataRequest) => {
+      
       let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ServiceID, dataRequest.FromDistrictID,
         dataRequest.ToDistrictID, dataRequest.Weight, dataRequest.Length, dataRequest.Width, dataRequest.Height)
 
       // nếu có dịch vụ mở rộng thì k lưu cache vì giá khác nhau
       let checkRequest = !(dataRequest.CouponCode || dataRequest.InsuranceFee)
       return new Promise((resolve, reject) => {
-        if (!checkRequest) {
+        if (!checkConnectRedis || !checkRequest) {
           return resolve({
             s: 500, data: null
           })
@@ -27,8 +28,7 @@ function ghnController() {
           return resolve({
             s: 500, data: null
           })
-        });
-
+        })
       })
     },
 
@@ -46,7 +46,7 @@ function ghnController() {
 
     setPriceToCache: (req, res, dataRequest, data) => {
       let checkRequest = !(dataRequest.CouponCode || dataRequest.InsuranceFee)
-      if (checkRequest) {
+      if (checkRequest && checkConnectRedis) {
         let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.data.serviceId, dataRequest.FromDistrictID,
           dataRequest.ToDistrictID, dataRequest.Weight, dataRequest.Length, dataRequest.Width, dataRequest.Height)
 
