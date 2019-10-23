@@ -86,39 +86,40 @@ function splController() {
   return {
     getPrice: async (req, res) => {
       console.log('abc', req.body)
-      // let services = req.body.services
-      //
-      // return Promise.all(
-      //   services.map(service => {
-      //     let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-      //     dataRequest.data.service = service
-      //     let dataDelivery = self.prepareDataToDelivery(dataRequest)
-      //     return self.getPriceFromCache(req, res, dataDelivery)
-      //       .then(result => {
-      //         if (result.s === 200) {
-      //           return result.data
-      //         }
-      //         return null
-      //       }).then(resultCache => {
-      //         if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
-      //           return self.getPriceFromDelivery(req, res, dataDelivery)
-      //         }
-      //
-      //         return resultCache
-      //       })
-      //   })
-      // ).then(results => {
-      //   results.map(result => {
-      //     // nếu thành công thì ghi vào log
-      //     if (result.error_code === 1) {
-      //       self.setPriceToCache(req, res, req.body, result)
-      //     }
-      //   })
-      //
-      //   return res.json({s: 200, data: results})
-      // }).catch(error => {
-      //   return res.json({s: 500, data: error.message})
-      // })
+      let services = req.body.services
+      console.log('services', services)
+      return Promise.all(
+        services.map(service => {
+          console.log('service', service)
+          let dataRequest = JSON.parse(JSON.stringify(req.body.data))
+          dataRequest.data.service = service
+          let dataDelivery = self.prepareDataToDelivery(dataRequest)
+          return self.getPriceFromCache(req, res, dataDelivery)
+            .then(result => {
+              if (result.s === 200) {
+                return result.data
+              }
+              return null
+            }).then(resultCache => {
+              if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
+                return self.getPriceFromDelivery(req, res, dataDelivery)
+              }
+
+              return resultCache
+            })
+        })
+      ).then(results => {
+        results.map(result => {
+          // nếu thành công thì ghi vào log
+          if (result.error_code === 1) {
+            self.setPriceToCache(req, res, req.body, result)
+          }
+        })
+
+        return res.json({s: 200, data: results})
+      }).catch(error => {
+        return res.json({s: 500, data: error.message})
+      })
     }
   }
 }
