@@ -13,6 +13,7 @@ function ClientService() {
       }
       return clientRedis.get(keyCache, (err, data) => {
         if (data) {
+
           return resolve({
             s: 200, data: JSON.parse(data)
           })

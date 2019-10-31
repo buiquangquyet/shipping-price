@@ -73,6 +73,7 @@ function splController() {
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
+                result.data.fromCache = true
                 return result.data
               }
               return null
@@ -87,7 +88,7 @@ function splController() {
       ).then(results => {
         results.map(result => {
           // nếu thành công thì ghi vào log
-          if (result.error_code === 1 && checkConnectRedis && checkRequest) {
+          if (result.error_code === 1 && checkConnectRedis && checkRequest && !result.fromCache) {
             let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data[0].serviceId, dataRequestDelivery.pickup_address_code,
               dataRequestDelivery.receive_address_code, dataRequestDelivery.weight, dataRequestDelivery.length, dataRequestDelivery.width, dataRequestDelivery.height)
             ClientService.setPriceToCache(keyCache, result)

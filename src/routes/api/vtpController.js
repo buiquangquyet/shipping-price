@@ -43,7 +43,12 @@ function vtpController() {
       return new Promise((resolve, reject) => {
         return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, dataDelivery, {headers: {'Token': dataDelivery.token}}
         ).then(response => {
-          response.data.data.serviceId = dataDelivery.ORDER_SERVICE
+          if (response.data.error) {
+            response.data.serviceId = dataDelivery.ORDER_SERVICE
+          } else {
+            response.data.data.serviceId = dataDelivery.ORDER_SERVICE
+          }
+
           return resolve(response.data)
         }).catch(error => {
           if (error.code && error.code === 'ECONNABORTED') {
@@ -81,6 +86,7 @@ function vtpController() {
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
+                result.data.fromCache = true
                 return result.data
               }
               return null
@@ -95,7 +101,7 @@ function vtpController() {
       ).then(results => {
         results.map(result => {
           // nếu thành công thì ghi vào log
-          if (!result.error && checkRequest && checkConnectRedis) {
+          if (!result.error && checkRequest && checkConnectRedis && !result.fromCache) {
             let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequestDelivery.SENDER_DISTRICT + '_' + dataRequestDelivery.SENDER_PROVINCE,
               dataRequestDelivery.RECEIVER_DISTRICT + '_' + dataRequestDelivery.RECEIVER_PROVINCE, dataRequestDelivery.PRODUCT_WEIGHT)
             ClientService.setPriceToCache(keyCache, result)

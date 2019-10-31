@@ -59,6 +59,7 @@ function ghnController() {
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
+                result.data.fromCache = true
                 return result.data
               }
               return null
@@ -72,7 +73,7 @@ function ghnController() {
       ).then(results => {
         results.map(result => {
           // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
-          if (result.code && checkRequest && checkConnectRedis) {
+          if (result.code && checkRequest && checkConnectRedis && !result.fromCache) {
             let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequest.FromDistrictID,
               dataRequest.ToDistrictID, dataRequest.Weight, dataRequest.Length, dataRequest.Width, dataRequest.Height)
               ClientService.setPriceToCache(keyCache, result)

@@ -5,6 +5,7 @@ const ClientService = require('../util/clientService')
 function ghtkController() {
   const self = {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.GHTK : Setting.LOCAL.GHTK,
+    FROM_CACHE: false,
 
     getPriceFromCache: (req, res, dataRequest) => {
       let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT,
@@ -84,6 +85,7 @@ function ghtkController() {
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
+                result.data.fromCache = true
                 return result.data
               }
               return null
@@ -98,10 +100,9 @@ function ghtkController() {
       ).then(results => {
         results.map(result => {
           // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
-          if (result.success && checkRequest && checkConnectRedis) {
+          if (result.success && checkRequest && checkConnectRedis && !result.fromCache) {
             let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.fee.serviceId, dataRequest.SENDER_DISTRICT,
               dataRequest.RECEIVER_DISTRICT, dataRequest.weight)
-
             ClientService.setPriceToCache(keyCache, result)
           }
         })
@@ -110,43 +111,6 @@ function ghtkController() {
       }).catch(error => {
         return res.json({s: 500, data: error.message})
       })
-
-
-      // try {
-      //   await Promise.all(
-      //     services.map(service => {
-      //       let dataRequest = JSON.parse(JSON.stringify(req.body))
-      //       dataRequest.transport = service[1]
-      //
-      //       return self.getPriceFromCache(req, res, dataRequest).then(dataCache => {
-      //         if (dataCache.s == 200) {
-      //           dataCache.data.serviceId = service
-      //           result.push(dataCache.data)
-      //         } else {
-      //           return axios({
-      //             method: 'get', url: self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url,
-      //             params: dataRequest, headers: {'Token': dataRequest.token}
-      //           }).then(response => {
-      //             if (response.data.success) {
-      //               response.data.fee.serviceId = service[0]
-      //               self.setPriceToCache(req, res, dataRequest, response.data)
-      //             } else {
-      //               response.data.serviceId = service[0]
-      //             }
-      //
-      //             result.push(response.data)
-      //
-      //           }).catch(error => {
-      //             return res.json({s: 400, data: error})
-      //           })
-      //         }
-      //       })
-      //     })
-      //   )
-      //   return res.json({s: 200, data: result})
-      // } catch (e) {
-      //   return res.json({s: 400, data: e.message})
-      // }
     }
   }
 }
