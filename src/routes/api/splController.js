@@ -1,5 +1,5 @@
 const Setting = require('../../../config/setting')
-const axios = require('axios')
+const axios = require('../client')
 const crypto = require("crypto");
 const ClientService = require('../util/clientService')
 
@@ -41,7 +41,16 @@ function splController() {
             response.data.serviceId = dataToDelivery.data.service
             return resolve(response.data)
         }).catch(error => {
-          return resolve({s: 500, data: error})
+          if (error.code && error.code === 'ECONNABORTED') {
+            let data = {
+              error_code: 504,
+              serviceId: dataToDelivery.data.service,
+              description: 'Không thể kết nối đến máy chủ của SpeedLink'
+            }
+            return resolve(data)
+          } else {
+            return resolve({s: 500, data: error})
+          }
         })
       })
     },

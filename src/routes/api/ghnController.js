@@ -1,5 +1,5 @@
 const Setting = require('../../../config/setting')
-const axios = require('axios')
+const axios = require('../client')
 const ClientService = require('../util/clientService')
 
 function ghnController() {
@@ -12,8 +12,18 @@ function ghnController() {
           response.data.data.serviceId = dataDelivery.ServiceID
           return resolve(response.data)
         }).catch(error => {
-          error.response.data.serviceId = dataDelivery.ServiceID
-          return resolve(error.response.data)
+          if (error.code && error.code === 'ECONNABORTED') {
+            let data = {
+              code: false,
+              serviceId: dataDelivery.ServiceID,
+              msg: 'Không thể kết nối đến máy chủ của GHN'
+            }
+            return resolve(data)
+          } else {
+            error.response.data.serviceId = dataDelivery.ServiceID
+            return resolve(error.response.data)
+          }
+
         })
       })
     },

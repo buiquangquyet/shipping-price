@@ -1,5 +1,5 @@
 const Setting = require('../../../config/setting')
-const axios = require('axios')
+const axios = require('../client')
 const ClientService = require('../util/clientService')
 
 function vtpController() {
@@ -46,9 +46,18 @@ function vtpController() {
           response.data.data.serviceId = dataDelivery.ORDER_SERVICE
           return resolve(response.data)
         }).catch(error => {
-          let data = error.response.data
-          data.serviceId = dataDelivery.ORDER_SERVICE
-          return resolve(data)
+          if (error.code && error.code === 'ECONNABORTED') {
+            let data = {
+              error: true,
+              serviceId: dataDelivery.ORDER_SERVICE,
+              msg: 'Không thể kết nối đến máy chủ của Viettel Post'
+            }
+            return resolve(data)
+          } else {
+            let data = error.response.data
+            data.serviceId = dataDelivery.ORDER_SERVICE
+            return resolve(data)
+          }
         })
       })
     },

@@ -1,5 +1,5 @@
 const Setting = require('../../../config/setting')
-const axios = require('axios')
+const axios = require('../client')
 const ClientService = require('../util/clientService')
 
 function ghtkController() {
@@ -43,7 +43,16 @@ function ghtkController() {
             return resolve(response.data)
 
         }).catch(error => {
-          return resolve({s: 500, data: error})
+          if (error.code && error.code === 'ECONNABORTED') {
+            let data = {
+              success: false,
+              serviceId: serviceId,
+              msg: 'Không thể kết nối đến máy chủ của GHTK'
+            }
+            return resolve(data)
+          } else {
+            return resolve({s: 500, data: error})
+          }
         })
       })
     },
