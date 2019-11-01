@@ -33,8 +33,8 @@ function vtpController() {
     setPriceToCache: (req, res, dataRequest, data) => {
       let checkRequest = !(dataRequest.ORDER_SERVICE_ADD)
       if (checkConnectRedis && checkRequest) {
-        let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.data.serviceId, dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE,
-          dataRequest.RECEIVER_DISTRICT + '_' + dataRequest.RECEIVER_PROVINCE, dataRequest.PRODUCT_WEIGHT)
+        let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, data.data.serviceId, dataRequest.SENDER_DISTRICT,
+          dataRequest.RECEIVER_DISTRICT, dataRequest.PRODUCT_WEIGHT)
         clientRedis.setex(keyCache, 300, JSON.stringify(data))
       }
     },
