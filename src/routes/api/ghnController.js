@@ -53,14 +53,14 @@ function ghnController() {
         checkRequest= false
       }
 
-      console.log(dataRequest)
-      console.log(checkRequest)
-
       return Promise.all(
         services.map(service => {
           let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
           let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
             dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height)
+
+          console.log(dataDelivery)
+          console.log(checkRequest)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
