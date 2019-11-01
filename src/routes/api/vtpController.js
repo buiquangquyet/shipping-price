@@ -102,8 +102,8 @@ function vtpController() {
         results.map(result => {
           // nếu thành công thì ghi vào log
           if (!result.error && checkRequest && checkConnectRedis && !result.fromCache) {
-            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequestDelivery.SENDER_DISTRICT + '_' + dataRequestDelivery.SENDER_PROVINCE,
-              dataRequestDelivery.RECEIVER_DISTRICT + '_' + dataRequestDelivery.RECEIVER_PROVINCE, dataRequestDelivery.PRODUCT_WEIGHT)
+            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequestDelivery.SENDER_DISTRICT,
+              dataRequestDelivery.RECEIVER_DISTRICT, dataRequestDelivery.PRODUCT_WEIGHT)
             ClientService.setPriceToCache(keyCache, result)
           }
         })
