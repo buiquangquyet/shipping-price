@@ -48,7 +48,7 @@ function ghnController() {
     getPrice: async (req, res) => {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequest.CouponCode || dataRequest.InsuranceFee)
+      let checkRequest = !(dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0))
 
       return Promise.all(
         services.map(service => {
