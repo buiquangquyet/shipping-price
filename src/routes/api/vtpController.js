@@ -7,8 +7,8 @@ function vtpController() {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.VTP : Setting.LOCAL.VTP,
 
     getPriceFromCache: (req, res, dataRequest) => {
-      let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT + '_' + dataRequest.SENDER_PROVINCE,
-        dataRequest.RECEIVER_DISTRICT + '_' + dataRequest.RECEIVER_PROVINCE, dataRequest.PRODUCT_WEIGHT)
+      let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT,
+        dataRequest.RECEIVER_DISTRICT, dataRequest.PRODUCT_WEIGHT)
 
       let checkRequest = !(dataRequest.ORDER_SERVICE_ADD)
       return new Promise((resolve, reject) => {
@@ -79,8 +79,8 @@ function vtpController() {
           dataDelivery.ORDER_SERVICE = service
           dataDelivery.token = req.body.token
 
-          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT + '_' + dataDelivery.SENDER_PROVINCE,
-            dataDelivery.RECEIVER_DISTRICT + '_' + dataDelivery.RECEIVER_PROVINCE, dataDelivery.PRODUCT_WEIGHT)
+          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT,
+            dataDelivery.RECEIVER_DISTRICT, dataDelivery.PRODUCT_WEIGHT)
 
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
