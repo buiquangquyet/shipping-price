@@ -48,7 +48,10 @@ function ghnController() {
     getPrice: async (req, res) => {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0))
+      let checkRequest = true
+      if (dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
+        checkRequest= false
+      }
 
       return Promise.all(
         services.map(service => {
@@ -59,6 +62,7 @@ function ghnController() {
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
+                console.log('cache')
                 result.data.fromCache = true
                 return result.data
               }
