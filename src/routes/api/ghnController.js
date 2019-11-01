@@ -53,6 +53,9 @@ function ghnController() {
         checkRequest= false
       }
 
+      console.log(dataRequest)
+      console.log(checkRequest)
+
       return Promise.all(
         services.map(service => {
           let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
