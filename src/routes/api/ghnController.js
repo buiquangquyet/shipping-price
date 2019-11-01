@@ -50,7 +50,7 @@ function ghnController() {
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = true
       if (dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
-        checkRequest= false
+        checkRequest = false
       }
 
       return Promise.all(
@@ -59,13 +59,9 @@ function ghnController() {
           let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
             dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height)
 
-          console.log(dataDelivery)
-          console.log(checkRequest)
-
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
-                console.log('cache')
                 result.data.fromCache = true
                 return result.data
               }
