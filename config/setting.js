@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: true,
+  IS_PRODUCTION: false,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
@@ -21,7 +21,7 @@ let SETTING = {
       'client_code': 'GHTK'
     },
     SPL: {
-      "domain": "http://partner.speedlink.vn/Partner/",
+      "domain": "http://partner.speedlink.vn/Partner",
       "price_url": "/checkTransportationFee",
       "api_key": "47DF100E43BDC5A167DACEF892ACFA18FE7CD66E",
       'client_code': 'SPL'
