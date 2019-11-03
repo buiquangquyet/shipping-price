@@ -5,24 +5,32 @@ function ClientService() {
       + weight + '_' + length + '_' + width + '_' + height
   },
   this.checkCachePrice = function (keyCache, checkReqeust) {
-    return new Promise((resolve, reject) => {
-      if (!checkConnectRedis || !checkReqeust) {
-        return resolve({
-          s: 500, data: null
-        })
-      }
-      return clientRedis.get(keyCache, (err, data) => {
-        if (data) {
 
+      return new Promise((resolve, reject) => {
+        if (!checkConnectRedis || !checkReqeust) {
           return resolve({
-            s: 200, data: JSON.parse(data)
+            s: 500, data: null
           })
         }
-        return resolve({
-          s: 500, data: null
+        return clientRedis.get(keyCache, (err, data) => {
+          if (data) {
+            try {
+            return resolve({
+              s: 200, data: JSON.parse(data)
+            })
+
+          } catch (e) {
+              return resolve({
+                s: 500, data: null
+              })
+            }
+          }
+          return resolve({
+            s: 500, data: null
+          })
         })
       })
-    })
+
   },
   this.setPriceToCache = function (keyCache, data) {
     clientRedis.setex(keyCache, 300, JSON.stringify(data))
