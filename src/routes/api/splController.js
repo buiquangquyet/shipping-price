@@ -58,6 +58,7 @@ function splController() {
   }
   return {
     getPrice: async (req, res) => {
+      let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data.data))
       let checkRequest = !(dataRequestDelivery.coupon_code)
@@ -67,7 +68,7 @@ function splController() {
           let dataRequest = JSON.parse(JSON.stringify(req.body.data))
           dataRequest.data.service = service
           let dataDelivery = self.prepareDataToDelivery(dataRequest)
-          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.data.service, dataDelivery.data.pickup_address_code,
+          let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.data.service, dataDelivery.data.pickup_address_code,
             dataDelivery.data.receive_address_code, dataDelivery.data.weight, dataDelivery.data.length, dataDelivery.data.width, dataDelivery.data.height)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
@@ -89,9 +90,9 @@ function splController() {
         results.map(result => {
           // nếu thành công thì ghi vào log
           if (result.error_code === 1 && checkConnectRedis && checkRequest && !result.fromCache) {
-            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data[0].serviceId, dataRequestDelivery.pickup_address_code,
+            let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, result.data[0].serviceId, dataRequestDelivery.pickup_address_code,
               dataRequestDelivery.receive_address_code, dataRequestDelivery.weight, dataRequestDelivery.length, dataRequestDelivery.width, dataRequestDelivery.height)
-            ClientService.setPriceToCache(keyCache, result)
+            ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
 

@@ -69,6 +69,7 @@ function vtpController() {
   }
   return {
     getPrice: async (req, res) => {
+      let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD)
@@ -79,7 +80,7 @@ function vtpController() {
           dataDelivery.ORDER_SERVICE = service
           dataDelivery.token = req.body.token
 
-          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT,
+          let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT,
             dataDelivery.RECEIVER_DISTRICT, dataDelivery.PRODUCT_WEIGHT)
 
 
@@ -102,9 +103,9 @@ function vtpController() {
         results.map(result => {
           // nếu thành công thì ghi vào log
           if (!result.error && checkRequest && checkConnectRedis && !result.fromCache) {
-            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequestDelivery.SENDER_DISTRICT,
+            let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequestDelivery.SENDER_DISTRICT,
               dataRequestDelivery.RECEIVER_DISTRICT, dataRequestDelivery.PRODUCT_WEIGHT)
-            ClientService.setPriceToCache(keyCache, result)
+            ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
 

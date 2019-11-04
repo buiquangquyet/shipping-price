@@ -1,8 +1,14 @@
 
 function ClientService() {
-  this.genKeyCache = function (clientCode, serviceId, from, to, weight, length = 0, width = 0, height = 0) {
-    return clientCode+ '_' + serviceId + '_' + from + '_' + to + '_'
+  this.genKeyCache = function (isTrial, clientCode, serviceId, from, to, weight, length = 0, width = 0, height = 0) {
+    if (isTrial) {
+      return 'TRIAL_' + clientCode + '_' + serviceId + '_' + from + '_' + to + '_'
+        + weight + '_' + length + '_' + width + '_' + height
+    }
+
+    return clientCode + '_' + serviceId + '_' + from + '_' + to + '_'
       + weight + '_' + length + '_' + width + '_' + height
+
   },
   this.checkCachePrice = function (keyCache, checkReqeust) {
 
@@ -32,8 +38,12 @@ function ClientService() {
       })
 
   },
-  this.setPriceToCache = function (keyCache, data) {
-    clientRedis.setex(keyCache, 300, JSON.stringify(data))
+  this.setPriceToCache = function (keyCache, data, isTrial) {
+    if (isTrial) {
+      clientRedis.set(keyCache, JSON.stringify(data))
+    } else {
+      clientRedis.setex(keyCache, 300, JSON.stringify(data))
+    }
   }
 }
 

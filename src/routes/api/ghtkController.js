@@ -70,6 +70,7 @@ function ghtkController() {
   }
   return {
     getPrice: async (req, res) => {
+      let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = !(dataRequest.value && dataRequest.value != 0)
@@ -79,7 +80,7 @@ function ghtkController() {
           dataRequest.ORDER_SERVICE = service[0]
           dataRequest.transport = service[1]
           dataRequest.token = req.body.token
-          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT,
+          let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataRequest.ORDER_SERVICE, dataRequest.SENDER_DISTRICT,
             dataRequest.RECEIVER_DISTRICT, dataRequest.weight)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
@@ -101,9 +102,9 @@ function ghtkController() {
         results.map(result => {
           // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
           if (result.success && checkRequest && checkConnectRedis && !result.fromCache) {
-            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.fee.serviceId, dataRequest.SENDER_DISTRICT,
+            let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, result.fee.serviceId, dataRequest.SENDER_DISTRICT,
               dataRequest.RECEIVER_DISTRICT, dataRequest.weight)
-            ClientService.setPriceToCache(keyCache, result)
+            ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
 

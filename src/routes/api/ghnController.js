@@ -49,6 +49,7 @@ function ghnController() {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = true
+      let isTrial = req.body.isTrial
       if (dataRequest.Coupon || dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
         checkRequest = false
       }
@@ -56,7 +57,7 @@ function ghnController() {
       return Promise.all(
         services.map(service => {
           let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
-          let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
+          let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
             dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
@@ -77,9 +78,9 @@ function ghnController() {
         results.map(result => {
           // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
           if (result.code && checkRequest && checkConnectRedis && !result.fromCache) {
-            let keyCache = ClientService.genKeyCache(self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequest.FromDistrictID,
+            let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, result.data.serviceId, dataRequest.FromDistrictID,
               dataRequest.ToDistrictID, dataRequest.Weight, dataRequest.Length, dataRequest.Width, dataRequest.Height)
-              ClientService.setPriceToCache(keyCache, result)
+              ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
 
