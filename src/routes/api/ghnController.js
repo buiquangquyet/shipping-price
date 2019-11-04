@@ -49,7 +49,7 @@ function ghnController() {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = true
-      if (dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
+      if (dataRequest.Coupon || dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
         checkRequest = false
       }
 

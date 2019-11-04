@@ -6,8 +6,8 @@ let SETTING = {
     URL: "",
     REDIS_URL: "redis://localhost:6379",
     GHN: {
-      "domain": "https://console.ghn.vn/api/v1/apiv3",
-      "price_url": "/apiv3-api/api/v1/apiv3/CalculateFee",
+      "domain": "https://console.ghn.vn",
+      "price_url": "/api/v1/apiv3/CalculateFee",
       'client_code': 'GHN'
     },
     VTP: {
