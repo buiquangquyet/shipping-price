@@ -23,7 +23,7 @@ let SETTING = {
     SPL: {
       "domain": "http://partner.speedlink.vn/Partner",
       "price_url": "/checkTransportationFee",
-      "api_key": "47DF100E43BDC5A167DACEF892ACFA18FE7CD66E",
+      "api_key": "8623977C8970FECBEF28CD0D8165E01A90605107",
       'client_code': 'SPL'
     }
   },
