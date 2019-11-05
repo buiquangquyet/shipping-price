@@ -7,8 +7,8 @@ const home = require('./routes/home');
 const redis = require('redis');
 
 // connect to Redis
-const REDIS_URL = Setting.IS_PRODUCTION ? Setting.PRODUCTION.REDIS_URL : Setting.LOCAL.REDIS_URL;
-global.clientRedis = redis.createClient(REDIS_URL);
+const Redis = Setting.IS_PRODUCTION ? Setting.PRODUCTION.REDIS : Setting.LOCAL.REDIS;
+global.clientRedis = redis.createClient({host: Redis.host, port: Redis.port, password: Redis.pass});
 global.checkConnectRedis = false
 clientRedis.on('connect', () => {
   checkConnectRedis = true

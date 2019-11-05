@@ -1,10 +1,15 @@
 let SETTING = {
-  IS_PRODUCTION: false,
+  IS_PRODUCTION: true,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
     URL: "",
-    REDIS_URL: "redis://localhost:6379",
+    REDIS: {
+      'port': 6379,
+      'host': 'localhost',
+      'pass': ''
+    },
+    // REDIS_URL: "redis://localhost:6379",
     GHN: {
       "domain": "https://console.ghn.vn",
       "price_url": "/api/v1/apiv3/CalculateFee",
@@ -31,7 +36,11 @@ let SETTING = {
     NAME: "Server Developement",
     PORT: 3000,
     URL: "",
-    REDIS_URL: "redis://localhost:6379",
+    REDIS: {
+      'port': 6379,
+      'host': 'localhost',
+      'pass': ''
+    },
     GHN: {
       "domain": "https://dev-online-gateway.ghn.vn",
       "price_url": "/apiv3-api/api/v1/apiv3/CalculateFee",
