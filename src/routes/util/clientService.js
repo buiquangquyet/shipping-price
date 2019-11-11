@@ -1,6 +1,7 @@
 
 function ClientService() {
-  this.genKeyCache = function (isTrial, clientCode, serviceId, from, to, weight, length = 0, width = 0, height = 0, moneyCollection = 0) {
+  this.genKeyCache = function (isTrial, clientCode, serviceId, from, to, weight, length = 0, width = 0,
+                               height = 0, moneyCollection = 0, couponCode = '') {
     if (isTrial) {
       return 'TRIAL_' + clientCode + '_' + serviceId + '_' + from + '_' + to + '_'
         + weight + '_' + length + '_' + width + '_' + height + '_' + moneyCollection

@@ -50,7 +50,7 @@ function ghnController() {
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
       let checkRequest = true
       let isTrial = req.body.isTrial
-      if (dataRequest.CouponCode || dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
+      if (dataRequest.InsuranceFee || (dataRequest.OrderCosts && dataRequest.OrderCosts.length > 0)) {
         checkRequest = false
       }
 
@@ -58,7 +58,7 @@ function ghnController() {
         services.map(service => {
           let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
-            dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height)
+            dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height, 0,dataDelivery.CouponCode)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
