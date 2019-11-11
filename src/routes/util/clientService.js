@@ -7,7 +7,7 @@ function ClientService() {
     }
 
     return clientCode + '_' + serviceId + '_' + from + '_' + to + '_'
-      + weight + '_' + length + '_' + width + '_' + height
+      + weight + '_' + length + '_' + width + '_' + height + '_' + moneyCollection
 
   },
   this.checkCachePrice = function (keyCache, checkReqeust) {
