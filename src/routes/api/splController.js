@@ -34,6 +34,7 @@ function splController() {
             }
           }
         ).then(response => {
+          console.log(response.data)
           if (response.data.error_code === 1) {
             response.data.data[0].serviceId = dataToDelivery.data.service
             return resolve(response.data)
@@ -61,7 +62,7 @@ function splController() {
       let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data.data))
-      let checkRequest = !(dataRequestDelivery.coupon_code)
+      let checkRequest = true
 
       return Promise.all(
         services.map(service => {
@@ -69,7 +70,7 @@ function splController() {
           dataRequest.data.service = service
           let dataDelivery = self.prepareDataToDelivery(dataRequest)
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.data.service, dataDelivery.data.pickup_address_code,
-            dataDelivery.data.receive_address_code, dataDelivery.data.weight, dataDelivery.data.length, dataDelivery.data.width, dataDelivery.data.height)
+            dataDelivery.data.receive_address_code, dataDelivery.data.weight, dataDelivery.data.length, dataDelivery.data.width, dataDelivery.data.height, 0, dataDelivery.data.coupon_code)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
@@ -91,7 +92,8 @@ function splController() {
           // nếu thành công thì ghi vào log
           if (result.error_code === 1 && checkConnectRedis && checkRequest && !result.fromCache) {
             let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, result.data[0].serviceId, dataRequestDelivery.pickup_address_code,
-              dataRequestDelivery.receive_address_code, dataRequestDelivery.weight, dataRequestDelivery.length, dataRequestDelivery.width, dataRequestDelivery.height)
+              dataRequestDelivery.receive_address_code, dataRequestDelivery.weight, dataRequestDelivery.length, dataRequestDelivery.width, dataRequestDelivery.height,
+              0, dataRequestDelivery.coupon_code)
             ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
