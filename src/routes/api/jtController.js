@@ -57,7 +57,7 @@ function jtController() {
       let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequestDelivery.isGbh)
+      let checkRequest = true
 
       return Promise.all(
         services.map(service => {
