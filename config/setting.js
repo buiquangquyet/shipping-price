@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: true,
+  IS_PRODUCTION: false,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
@@ -30,7 +30,12 @@ let SETTING = {
       "price_url": "/checkTransportationFee",
       "api_key": "8623977C8970FECBEF28CD0D8165E01A90605107",
       'client_code': 'SPL'
-    }
+    },
+    JT: {
+      "domain": "http://159.138.35.156:22221",
+      "price_url": "/yuenan-interface-web/standard/inquiry!freight.action",
+      'client_code': 'JT'
+    },
   },
   LOCAL: {
     NAME: "Server Developement",
@@ -61,7 +66,13 @@ let SETTING = {
       "price_url": "/checkTransportationFee",
       "api_key": "F55EDDE2C35BA331A0C91D4960AE6C057BA84EF5",
       'client_code': 'SPL'
-    }
+    },
+    JT: {
+      "domain": "http://159.138.35.156:22221",
+      "price_url": "/yuenan-interface-web/standard/inquiry!freight.action",
+      "api_key": "04fc653c0f661e1204bd804774e01824",
+      'client_code': 'JT'
+    },
   }
 }
 module.exports = SETTING
