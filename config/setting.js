@@ -32,7 +32,7 @@ let SETTING = {
       'client_code': 'SPL'
     },
     JT: {
-      "domain": "http://159.138.35.156:22221",
+      "domain": "http://sellapp.jtexpress.vn:22220",
       "price_url": "/yuenan-interface-web/standard/inquiry!freight.action",
       'client_code': 'JT'
     },
