@@ -56,7 +56,8 @@ function jtController() {
       let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = true
+      let logisticsInterface = JSON.parse(dataRequestDelivery.data.logistics_interface)
+      let checkRequest = parseInt(logisticsInterface.goodsvalue) != 0 || parseInt(logisticsInterface.itemsvalue) != 0 ? false : true
 
       return Promise.all(
         services.map(service => {
