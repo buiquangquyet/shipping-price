@@ -15,7 +15,6 @@ function jtController() {
         return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, formUrlEncoded(dataRequest), {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         }).then(response => {
-          console.log(response.data)
           response.data.responseitems[0].serviceId = serviceId
           return resolve(response.data)
         }).catch(error => {
@@ -36,8 +35,8 @@ function jtController() {
     getDataDigest: (logisticInterface, apiKey) => {
       let string = logisticInterface + apiKey
       var hash = md5(string)
-      let buff = new Buffer(hash)
-      return buff.toString('base64')
+    //  let buff = new Buffer(hash)
+      return Buffer.from(hash).toString('base64')
     },
 
     prepareDataToDelivery: (dataRequest, service) => {
