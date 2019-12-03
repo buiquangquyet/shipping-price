@@ -33,7 +33,7 @@ let SETTING = {
     },
     JT: {
       "domain": "http://sellapp.jtexpress.vn:22220",
-      "price_url": "/yuenan-interface-web/standard/inquiry!freight.action",
+      "price_url": "/yuenan-interface-web/standard/inquiry!newFreight.action",
       'client_code': 'JT'
     },
   },
@@ -69,8 +69,8 @@ let SETTING = {
     },
     JT: {
       "domain": "http://159.138.35.156:22221",
-      "price_url": "/yuenan-interface-web/standard/inquiry!freight.action",
-      "api_key": "04fc653c0f661e1204bd804774e01824",
+      "price_url": "/yuenan-interface-web/standard/inquiry!newFreight.action",
+      "api_key": "fe2acb33efb43c4401abb24f12478654",
       'client_code': 'JT'
     },
   }
