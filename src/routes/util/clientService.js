@@ -1,9 +1,9 @@
 
 function ClientService() {
   this.genKeyCache = function (isTrial, clientCode, serviceId, from, to, weight, length = 0, width = 0,
-                               height = 0, moneyCollection = 0, couponCode = 'NO_COUPON', productPrice = 0) {
+                               height = 0, couponCode = 'NO_COUPON') {
     let string = clientCode + '_' + serviceId + '_' + from + '_' + to + '_'
-      + weight + '_' + length + '_' + width + '_' + height + '_' + moneyCollection + '_' + couponCode + '_' + productPrice
+      + weight + '_' + length + '_' + width + '_' + height + '_' + couponCode
 
     if (isTrial) {
       return 'TRIAL_' + string
