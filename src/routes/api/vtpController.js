@@ -72,7 +72,7 @@ function vtpController() {
       let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD)
+      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION ? false : true
 
       return Promise.all(
         services.map(service => {
@@ -81,7 +81,7 @@ function vtpController() {
           dataDelivery.token = req.body.token
 
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT,
-            dataDelivery.RECEIVER_DISTRICT, dataDelivery.PRODUCT_WEIGHT, dataDelivery.MONEY_COLLECTION)
+            dataDelivery.RECEIVER_DISTRICT, dataDelivery.PRODUCT_WEIGHT)
 
 
           return ClientService.checkCachePrice(keyCache, checkRequest)

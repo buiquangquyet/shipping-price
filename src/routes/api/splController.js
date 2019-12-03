@@ -70,7 +70,7 @@ function splController() {
           dataRequest.data.service = service
           let dataDelivery = self.prepareDataToDelivery(dataRequest)
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.data.service, dataDelivery.data.pickup_address_code,
-            dataDelivery.data.receive_address_code, dataDelivery.data.weight, dataDelivery.data.length, dataDelivery.data.width, dataDelivery.data.height, 0, dataDelivery.data.coupon_code)
+            dataDelivery.data.receive_address_code, dataDelivery.data.weight, dataDelivery.data.length, dataDelivery.data.width, dataDelivery.data.height, dataDelivery.data.coupon_code)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
