@@ -2,6 +2,7 @@ const Setting = require('../../../config/setting')
 const axios = require('../client')
 const ClientService = require('../util/clientService')
 
+
 function vtpController() {
   const self = {
     INFO_DELIVERY: Setting.IS_PRODUCTION ? Setting.PRODUCTION.VTP : Setting.LOCAL.VTP,
@@ -71,19 +72,19 @@ function vtpController() {
     getPrice: async (req, res) => {
       let isTrial = req.body.isTrial
       let services = req.body.services
+      let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION ? false : true
+      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION)
 
       return Promise.all(
-        services.map(service => {
-          let dataDelivery = JSON.parse(JSON.stringify(req.body.data))
+        dataServices.map(dataService => {
+          let service = dataService.service
+          let dataDelivery = JSON.parse(JSON.stringify(dataService.data))
           dataDelivery.ORDER_SERVICE = service
           dataDelivery.token = req.body.token
 
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ORDER_SERVICE, dataDelivery.SENDER_DISTRICT,
             dataDelivery.RECEIVER_DISTRICT, dataDelivery.PRODUCT_WEIGHT)
-
-
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
               if (result.s === 200) {
