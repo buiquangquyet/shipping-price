@@ -58,7 +58,7 @@ function ghnController() {
         services.map(service => {
           let dataDelivery = self.prepareDataToDelivery(dataRequest, service, req.body.token)
           let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.ServiceID, dataDelivery.FromDistrictID,
-            dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height, 0, dataDelivery.CouponCode)
+            dataDelivery.ToDistrictID, dataDelivery.Weight, dataDelivery.Length, dataDelivery.Width, dataDelivery.Height, dataDelivery.CouponCode)
 
           return ClientService.checkCachePrice(keyCache, checkRequest)
             .then(result => {
