@@ -74,7 +74,9 @@ function vtpController() {
       let services = req.body.services
       let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION)
+
+      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0)
+
 
       return Promise.all(
         dataServices.map(dataService => {
