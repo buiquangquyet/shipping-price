@@ -72,7 +72,7 @@ function vtpController() {
       let isTrial = req.body.isTrial
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION ? false : true
+      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0 ? false : true
 
       return Promise.all(
         services.map(service => {
