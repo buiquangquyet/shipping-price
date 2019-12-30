@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: true,
+  IS_PRODUCTION: false,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
@@ -72,6 +72,11 @@ let SETTING = {
       "price_url": "/yuenan-interface-web/standard/inquiry!newFreight.action",
       "api_key": "fe2acb33efb43c4401abb24f12478654",
       'client_code': 'JT'
+    },
+    VNP: {
+      "domain": "https://apivnpost.vnit.top",
+      "price_url": "/api/DoiTac/TinhCuocTatCaDichVu",
+      'client_code': 'VNP'
     },
   }
 }
