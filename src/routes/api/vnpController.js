@@ -36,7 +36,8 @@ function vnpController() {
       let services = req.body.services
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
 
-      let checkRequest = dataRequestDelivery.UseBaoPhat || dataRequestDelivery.UseHoaDon || parseInt(dataRequestDelivery.OrderAmount) > 0 ? false : true
+      let checkRequest = dataRequestDelivery.UseBaoPhat || dataRequestDelivery.UseHoaDon || parseInt(dataRequestDelivery.OrderAmount) > 0
+      || parseInt(dataRequestDelivery.CodAmount) > 0 ? false : true
       let service = 'default' // với VNP k cần là dịch vụ nào vì gọi lên là lấy hết
 
       let from = dataRequestDelivery.SenderDistrictId + '_' + dataRequestDelivery.SenderProvinceId
