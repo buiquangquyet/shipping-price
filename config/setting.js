@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: false,
+  IS_PRODUCTION: true,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
@@ -35,6 +35,11 @@ let SETTING = {
       "domain": "http://sellapp.jtexpress.vn:22220",
       "price_url": "/yuenan-interface-web/standard/inquiry!newFreight.action",
       'client_code': 'JT'
+    },
+    VNP: {
+      "domain": "https://apivnpost.vnit.top",
+      "price_url": "/api/DoiTac/TinhCuocTatCaDichVu",
+      'client_code': 'VNP'
     },
   },
   LOCAL: {
