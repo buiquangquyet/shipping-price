@@ -41,6 +41,11 @@ let SETTING = {
       "price_url": "/api/DoiTac/TinhCuocTatCaDichVu",
       'client_code': 'VNP'
     },
+    BEST: {
+      "domain": "http://price.v3.vncpost.com",
+      "price_url": "/api/values/EstimateFee",
+      'client_code': 'BEST'
+    },
   },
   LOCAL: {
     NAME: "Server Developement",
@@ -82,6 +87,11 @@ let SETTING = {
       "domain": "https://apivnpost.vnit.top",
       "price_url": "/api/DoiTac/TinhCuocTatCaDichVu",
       'client_code': 'VNP'
+    },
+    BEST: {
+      "domain": "http://price.v3.vncpost.com",
+      "price_url": "/api/values/EstimateFee",
+      'client_code': 'BEST'
     },
   }
 }
