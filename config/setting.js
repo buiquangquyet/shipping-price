@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: true,
+  IS_PRODUCTION: false,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
