@@ -24,7 +24,7 @@ function bestController() {
             let data = {
               code: false,
               ServiceId: dataDelivery.ServiceId,
-              msg: 'Không thể kết nối đến máy chủ của GHN'
+              msg: 'Không thể kết nối đến máy chủ của BEST'
             }
             return resolve(data)
           } else {
