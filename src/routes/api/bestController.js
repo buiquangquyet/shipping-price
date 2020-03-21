@@ -45,8 +45,15 @@ function bestController() {
     prepareDataToDelivery: (dataRequest, service) => {
       return {
         ServiceId: parseInt(service),
+        UserName: dataRequest.UserName,
+        SourceDistrictId: dataRequest.SourceDistrictId,
+        SourceAddress: dataRequest.SourceAddress,
+        SourceWard: dataRequest.SourceWard,
         SourceDistrict: dataRequest.SourceDistrict,
         SourceCity: dataRequest.SourceCity,
+        DestDistrictId: dataRequest.DestDistrictId,
+        DestAddress: dataRequest.DestAddress,
+        DestWard: dataRequest.DestWard,
         DestDistrict: dataRequest.DestDistrict,
         DestCity: dataRequest.DestCity,
         ProductPrice: parseInt(dataRequest.ProductPrice),
