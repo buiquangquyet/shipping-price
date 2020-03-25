@@ -42,8 +42,8 @@ let SETTING = {
       'client_code': 'VNP'
     },
     BEST: {
-      "domain": "http://price.v3.vncpost.com",
-      "price_url": "/api/values/EstimateFee",
+      "domain": "http://price.vncpost.com/api/Service",
+      "price_url": "/EstimateFee",
       'client_code': 'BEST'
     },
   },
@@ -89,8 +89,8 @@ let SETTING = {
       'client_code': 'VNP'
     },
     BEST: {
-      "domain": "http://price.v3.vncpost.com",
-      "price_url": "/api/values/EstimateFee",
+      "domain": "http://price.v3.vncpost.com/api/values",
+      "price_url": "/EstimateFee",
       'client_code': 'BEST'
     },
   }
