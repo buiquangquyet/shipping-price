@@ -46,6 +46,14 @@ let SETTING = {
       "price_url": "/EstimateFee",
       'client_code': 'BEST'
     },
+    V2: {
+      GHN: {
+        "domain": "https://dev-online-gateway.ghn.vn",
+        "price_url": "/shiip/public-api/v2/shipping-order/fee",
+        'client_code': 'GHN_V2',
+        'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
+      },
+    },
   },
   LOCAL: {
     NAME: "Server Developement",
@@ -92,6 +100,14 @@ let SETTING = {
       "domain": "http://price.v3.vncpost.com/api/values",
       "price_url": "/EstimateFee",
       'client_code': 'BEST'
+    },
+    V2: {
+      GHN: {
+        "domain": "https://dev-online-gateway.ghn.vn",
+        "price_url": "/shiip/public-api/v2/shipping-order/fee",
+        'client_code': 'GHN_V2',
+        'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
+      },
     },
   }
 }

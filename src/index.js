@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Setting = require('../config/setting');
 const home = require('./routes/home');
+const home2 = require('./routes/home2');
 const redis = require('redis');
 
 // connect to Redis
@@ -30,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use('/api/v1', home);
+app.use('/api/v2', home2);
 app.use('/', (req, res) => {
   return res.send('Router not found')
 });
