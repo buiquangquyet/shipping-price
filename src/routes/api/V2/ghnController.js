@@ -74,8 +74,12 @@ function ghnController() {
     genKeyCache : (dataDelivery, isTrial) => {
       let from = dataDelivery.from_ward_code + '-' + dataDelivery.from_district_id;
       let to = dataDelivery.to_ward_code + '-' + dataDelivery.to_district_id;
+      let coupon = dataDelivery.coupon;
+      if (!dataDelivery.coupon) {
+        coupon = 'NO_COUPON'
+      }
       return ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.service_type_id, from,
-        to, dataDelivery.weight, dataDelivery.length, dataDelivery.width, dataDelivery.height, dataDelivery.coupon)
+        to, dataDelivery.weight, dataDelivery.length, dataDelivery.width, dataDelivery.height, coupon)
     },
   };
 
