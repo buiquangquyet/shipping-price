@@ -52,6 +52,7 @@ function ghnController() {
         shop_id: dataRequest.shop_id,
         service_id: dataRequest.service_id,
         service_type_id: dataRequest.service_type_id,
+        insurance_value: parseInt(dataRequest.insurance_value),
         pick_station_id: dataRequest.pick_station_id,
         from_district_id: dataRequest.from_district_id,
         from_ward_code: dataRequest.from_ward_code,
