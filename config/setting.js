@@ -50,7 +50,7 @@ let SETTING = {
       GHN: {
         "domain": "https://dev-online-gateway.ghn.vn",
         "price_url": "/shiip/public-api/v2/shipping-order/fee",
-        'client_code': 'GHN_V2',
+        'client_code': 'GHN2',
         'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
       },
     },
@@ -105,7 +105,7 @@ let SETTING = {
       GHN: {
         "domain": "https://dev-online-gateway.ghn.vn",
         "price_url": "/shiip/public-api/v2/shipping-order/fee",
-        'client_code': 'GHN_V2',
+        'client_code': 'GHN2',
         'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
       },
     },
