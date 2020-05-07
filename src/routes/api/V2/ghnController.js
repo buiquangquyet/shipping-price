@@ -72,8 +72,8 @@ function ghnController() {
      * @returns
      */
     genKeyCache : (dataDelivery, isTrial) => {
-      let from = dataDelivery.from_ward_code + ' - ' + dataDelivery.from_district_id;
-      let to = dataDelivery.to_ward_code + ' - ' + dataDelivery.to_district_id;
+      let from = dataDelivery.from_ward_code + '-' + dataDelivery.from_district_id;
+      let to = dataDelivery.to_ward_code + '-' + dataDelivery.to_district_id;
       return ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.service_type_id, from,
         to, dataDelivery.weight, dataDelivery.length, dataDelivery.width, dataDelivery.height, dataDelivery.coupon)
     },
