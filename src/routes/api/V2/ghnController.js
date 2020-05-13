@@ -23,17 +23,18 @@ function ghnController() {
         }).then(response => {
           response.data.fromCache = false
           response.data.code = true
+          response.data.serviceId = dataDelivery.service_type_id
           return resolve(response.data)
         }).catch(error => {
           if (error.code && error.code === 'ECONNABORTED') {
             let data = {
               code: false,
-              ServiceId: 2,
+              serviceId: 2,
               msg: 'Không thể kết nối đến máy chủ của hãng'
             }
             return resolve(data)
           } else {
-            error.response.data.ServiceId = 2
+            error.response.data.serviceId = 2
             return resolve(error.response.data)
           }
 
@@ -51,7 +52,7 @@ function ghnController() {
       return {
         shop_id: dataRequest.shop_id,
         service_id: dataRequest.service_id,
-        service_type_id: dataRequest.service_type_id,
+        service_type_id: service ? parseInt(service) : dataRequest.service_type_id,
         insurance_value: parseInt(dataRequest.insurance_value),
         pick_station_id: dataRequest.pick_station_id,
         from_district_id: dataRequest.from_district_id,
@@ -93,7 +94,7 @@ function ghnController() {
     getPrice: async (req, res) => {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequest.insurance_value); // Neu co COD hoac khai gia thi ko luu cache
+      let checkRequest = !(dataRequest.insurance_value > 0); // Neu co COD hoac khai gia thi ko luu cache
       let isTrial = req.body.isTrial
       return Promise.all(
         services.map(service => {
