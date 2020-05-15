@@ -92,7 +92,7 @@ let SETTING = {
       'client_code': 'JT'
     },
     VNP: {
-      "domain": "https://apivnpost.vnit.top",
+      "domain": "https://vnpost.vnit.top/api",
       "price_url": "/api/DoiTac/TinhCuocTatCaDichVu",
       'client_code': 'VNP'
     },
