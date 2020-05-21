@@ -94,7 +94,7 @@ function ghnController() {
     getPrice: async (req, res) => {
       let services = req.body.services
       let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-      let checkRequest = !(dataRequest.insurance_value > 0); // Neu co COD hoac khai gia thi ko luu cache
+      let checkRequest = !(dataRequest.insurance_value > 0 || dataRequest.pick_station_id > 0); // Neu co COD hoac khai gia hoac gui buu cuc thi ko luu cache
       let isTrial = req.body.isTrial
       return Promise.all(
         services.map(service => {
