@@ -86,7 +86,7 @@ let SETTING = {
       'client_code': 'SPL'
     },
     JT: {
-      "domain": "http://159.138.35.156:22221",
+      "domain": "http://47.57.106.86",
       "price_url": "/yuenan-interface-web/standard/inquiry!newFreight.action",
       "api_key": "fe2acb33efb43c4401abb24f12478654",
       'client_code': 'JT'
