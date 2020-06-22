@@ -48,10 +48,10 @@ let SETTING = {
     },
     V2: {
       GHN: {
-        "domain": "https://dev-online-gateway.ghn.vn",
+        "domain": "https://online-gateway.ghn.vn",
         "price_url": "/shiip/public-api/v2/shipping-order/fee",
         'client_code': 'GHN',
-        'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
+        'token': 'a74d16f4-9ef7-11ea-b3e1-b2e69541627f',
       },
     },
   },
