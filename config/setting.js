@@ -51,7 +51,7 @@ let SETTING = {
         "domain": "https://online-gateway.ghn.vn",
         "price_url": "/shiip/public-api/v2/shipping-order/fee",
         'client_code': 'GHN',
-        'token': 'a74d16f4-9ef7-11ea-b3e1-b2e69541627f',
+        'token': 'ecd44ab8-9e73-11ea-b037-22fcf096d0e7',
       },
     },
   },
