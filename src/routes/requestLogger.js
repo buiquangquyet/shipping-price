@@ -5,7 +5,7 @@ const transport = new winston.transports.DailyRotateFile({
   filename: 'shipping-price-request-%DATE%.log',
   dirname: './logging',
   datePattern: 'YYYY-MM-DD',
-  zippedArchive: true,
+  zippedArchive: false,
   maxFiles: '7d'
 });
 
