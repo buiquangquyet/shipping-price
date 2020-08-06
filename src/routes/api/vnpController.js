@@ -19,7 +19,7 @@ function vnpController() {
             let data = {
               success: false,
               serviceId: serviceId,
-              msg: 'Không thể kết nối đến máy chủ của J&T'
+              msg: 'Không thể kết nối đến máy chủ của VNP'
             }
             return resolve(data)
           } else {
