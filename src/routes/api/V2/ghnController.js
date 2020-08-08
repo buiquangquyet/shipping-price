@@ -19,6 +19,7 @@ function ghnController() {
           headers: {
             'Content-Type': 'application/json',
             'Token': self.INFO_DELIVERY.token,
+            'ShopId': parseInt(dataDelivery.shop_id),
           },
         }).then(response => {
           response.data.fromCache = false
