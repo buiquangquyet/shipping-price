@@ -44,15 +44,8 @@ axiosInstance.interceptors.response.use(response => {
 }, error => {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   try {
-    let response = error.response;
-    let res = {
-      status: response.status,
-      statusText: response.statusText,
-      headers: response.headers,
-      config: response.config,
-      data: response.data,
-    }
-    responseLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Response', res);
+    let response = error ? error.response : null;
+    responseLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Response', response, error);
   } catch (e) {
     console.log(e)
   }
