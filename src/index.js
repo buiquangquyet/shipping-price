@@ -1,3 +1,4 @@
+require('stackify-node-apm')
 const debug = require('debug')('server:debug');
 const config = require('config');
 const express = require('express');

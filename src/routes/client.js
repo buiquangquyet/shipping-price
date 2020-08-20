@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(request => {
   return request
 }, error => {
   try {
-    requestLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Request', error);
+    requestLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Error', error);
   } catch (e) {
     console.log(e)
   }
@@ -44,8 +44,7 @@ axiosInstance.interceptors.response.use(response => {
 }, error => {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   try {
-    let response = error ? error.response : null;
-    responseLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Response', response, error);
+    responseLogger.info('[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] Log Error', error);
   } catch (e) {
     console.log(e)
   }
