@@ -1,7 +1,7 @@
 /**
  * Stackify Node APM Configuration
  */
-const appName = process.env.STACKIFY_NAME ? process.env.STACKIFY_NAME : 'Shipping Application'
+const appName = process.env.STACKIFY_NAME ? process.env.STACKIFY_NAME : 'Shipping NodeJS App'
 const appEnv = process.env.STACKIFY_ENV ? process.env.STACKIFY_ENV : 'Development'
 
 exports.config = {
