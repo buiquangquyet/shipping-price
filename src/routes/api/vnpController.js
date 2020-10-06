@@ -23,7 +23,8 @@ function vnpController() {
             }
             return resolve(data)
           } else {
-            return resolve({s: 500, data: error})
+            error.response.data.serviceId = serviceId
+            return resolve({s: 500, data: error.response.data})
           }
         })
       })
