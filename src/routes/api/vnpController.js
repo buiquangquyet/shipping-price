@@ -16,10 +16,14 @@ function vnpController() {
           return resolve(response.data)
         }).catch(error => {
           if (error.code && error.code === 'ECONNABORTED') {
+            let msgErr = 'Không thể kết nối đến máy chủ của hãng'
+            if (error.message !== undefined && error.message.length > 0) {
+              msgErr = error.message;
+            }
             let data = {
               success: false,
               serviceId: serviceId,
-              msg: 'Không thể kết nối đến máy chủ của VNP'
+              msg: msgErr
             }
             return resolve(data)
           } else {
