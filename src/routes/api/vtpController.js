@@ -115,7 +115,7 @@ function vtpController() {
             ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
-
+        
         return res.json({s: 200, data: results})
       }).catch(error => {
         return res.json({s: 500, data: error.message})

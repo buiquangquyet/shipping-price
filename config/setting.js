@@ -53,6 +53,12 @@ let SETTING = {
         'client_code': 'GHN',
         'token': 'ecd44ab8-9e73-11ea-b037-22fcf096d0e7',
       },
+      EMS: {
+        "domain": "http://ws.ems.com.vn",
+        "price_url": "/api/v1/get-order-fee",
+        "client_code": "EMS",
+        "token": ""
+      }
     },
   },
   LOCAL: {
@@ -108,6 +114,12 @@ let SETTING = {
         'client_code': 'GHN',
         'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
       },
+      EMS: {
+        "domain": "http://staging.ws.ems.com.vn",
+        "price_url": "/api/v1/get-order-fee",
+        "client_code": "EMS",
+        "token": "e112d3812a0883459442eb1dd72e9db4"
+      }
     },
   }
 }
