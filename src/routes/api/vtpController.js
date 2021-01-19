@@ -79,7 +79,7 @@ function vtpController() {
       let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
 
-      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0)
+      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0 ? false : true
 
 
       return Promise.all(
@@ -115,7 +115,7 @@ function vtpController() {
             ClientService.setPriceToCache(keyCache, result, isTrial)
           }
         })
-                 
+
         return res.json({s: 200, data: results})
       }).catch(error => {
         return res.json({s: 500, data: error.message})
