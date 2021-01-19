@@ -34,7 +34,7 @@ function emsController() {
                         }
                         let data = {
                             code: false,
-                            serviceId: 2,
+                            serviceId: dataDelivery.service,
                             msg: msgErr
                         }
                         return resolve(data)
@@ -98,7 +98,7 @@ function emsController() {
          * @param res
          * @returns
          */
-        getPrice: async (req, res) => {
+        getPrice: (req, res) => {
             let services = req.body.services
             let dataRequest = JSON.parse(JSON.stringify(req.body.data))
             let checkRequest = !(dataRequest.vas.length > 0 || dataRequest.money_collect > 0) // Nếu có COD hoặc extra service thì không lưu cache
