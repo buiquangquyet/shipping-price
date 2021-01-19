@@ -53,10 +53,14 @@ function vtpController() {
           return resolve(response.data)
         }).catch(error => {
           if (error.code && error.code === 'ECONNABORTED') {
+            let msgErr = 'Không thể kết nối đến máy chủ của hãng'
+            if (error.message !== undefined && error.message.length > 0) {
+              msgErr = error.message;
+            }
             let data = {
               error: true,
               serviceId: dataDelivery.ORDER_SERVICE,
-              msg: 'Không thể kết nối đến máy chủ của Viettel Post'
+              msg: msgErr
             }
             return resolve(data)
           } else {
@@ -75,7 +79,7 @@ function vtpController() {
       let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
       let dataRequestDelivery = JSON.parse(JSON.stringify(req.body.data))
 
-      let checkRequest = dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0 ? false : true
+      let checkRequest = !(dataRequestDelivery.ORDER_SERVICE_ADD || dataRequestDelivery.MONEY_COLLECTION !== 0)
 
 
       return Promise.all(
