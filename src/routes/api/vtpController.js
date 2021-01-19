@@ -53,14 +53,10 @@ function vtpController() {
           return resolve(response.data)
         }).catch(error => {
           if (error.code && error.code === 'ECONNABORTED') {
-            let msgErr = 'Không thể kết nối đến máy chủ của hãng'
-            if (error.message !== undefined && error.message.length > 0) {
-              msgErr = error.message;
-            }
             let data = {
               error: true,
               serviceId: dataDelivery.ORDER_SERVICE,
-              msg: msgErr
+              msg: 'Không thể kết nối đến máy chủ của Viettel Post'
             }
             return resolve(data)
           } else {
