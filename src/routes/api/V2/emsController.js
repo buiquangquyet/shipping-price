@@ -56,14 +56,6 @@ function emsController() {
          * @returns
          */
         prepareDataToDelivery: (dataRequest, service) => {
-            let vas = dataRequest.vas
-            if (dataRequest.e_cod_services.includes(parseInt(service)) && vas.includes(dataRequest.cod_code)) {
-                // nếu là dịch vụ ECOD, và trong vas đang có dịch vụ 'cod' thì xóa 'cod' khỏi vas
-                // vì ECOD bao gồm cước cod rồi
-                let codIndex = vas.indexOf(dataRequest.cod_code)
-                vas.splice(codIndex, 1)
-            }
-            
             return {
                 from_province: dataRequest.from_province,
                 from_district: dataRequest.from_district,
@@ -72,7 +64,7 @@ function emsController() {
                 to_district: dataRequest.to_district,
                 to_ward: dataRequest.to_ward,
                 service: service ? parseInt(service) : dataRequest.service,
-                vas: vas,
+                vas: dataRequest.vas,
                 money_collect: parseInt(dataRequest.money_collect),
                 total_quantity: parseInt(dataRequest.total_quantity),
                 total_amount: parseInt(dataRequest.total_amount),
