@@ -57,7 +57,7 @@ let SETTING = {
         "domain": "http://ws.ems.com.vn",
         "price_url": "/api/v1/get-order-fee",
         "client_code": "EMS",
-        "token": "04196c8a36818ba57633319427cdad76"
+        "token": "4ac37f4648d38c7a9e39a5182bde986c"
       }
     },
   },
