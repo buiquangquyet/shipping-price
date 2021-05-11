@@ -53,6 +53,11 @@ let SETTING = {
         'client_code': 'GHN',
         'token': 'ecd44ab8-9e73-11ea-b037-22fcf096d0e7',
       },
+      VTPFW: {
+        "domain": "https://partner.viettelpost.vn",
+        "price_url": "/v2/order/getPrice",
+        'client_code': 'VTPFW'
+      },
     },
   },
   LOCAL: {
@@ -107,6 +112,11 @@ let SETTING = {
         "price_url": "/shiip/public-api/v2/shipping-order/fee",
         'client_code': 'GHN',
         'token': '7fede88f-7d71-11ea-9891-0eb0c1f50d4f',
+      },
+      VTPFW: {
+        "domain": "https://partner.viettelpost.vn",
+        "price_url": "/v2/order/getPrice",
+        'client_code': 'VTPFW'
       },
     },
   }
