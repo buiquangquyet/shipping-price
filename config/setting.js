@@ -58,7 +58,12 @@ let SETTING = {
         "price_url": "/api/v1/get-order-fee",
         "client_code": "EMS",
         "token": "4ac37f4648d38c7a9e39a5182bde986c"
-      }
+      },
+      VTPFW: {
+        "domain": "https://partner.viettelpost.vn",
+        "price_url": "/v2/order/getPrice",
+        'client_code': 'VTPFW'
+      },
     },
   },
   LOCAL: {
@@ -119,7 +124,12 @@ let SETTING = {
         "price_url": "/api/v1/get-order-fee",
         "client_code": "EMS",
         "token": "e112d3812a0883459442eb1dd72e9db4"
-      }
+      },
+      VTPFW: {
+        "domain": "https://partner.viettelpost.vn",
+        "price_url": "/v2/order/getPrice",
+        'client_code': 'VTPFW'
+      },
     },
   }
 }
