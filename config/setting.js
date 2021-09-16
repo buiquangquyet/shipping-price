@@ -1,5 +1,5 @@
 let SETTING = {
-  IS_PRODUCTION: true,
+  IS_PRODUCTION: false,
   PRODUCTION: {
     NAME: "Server Production",
     PORT: 3000,
@@ -63,6 +63,11 @@ let SETTING = {
         "domain": "https://partner.viettelpost.vn",
         "price_url": "/v2/order/getPrice",
         'client_code': 'VTPFW'
+      },
+      GRAB: {
+        "domain": " https://partner-api.stg-myteksi.com/grab-express",
+        "price_url": "/v1/deliveries/quotes",
+        'client_code': 'GRAB'
       },
     },
   },
@@ -129,6 +134,11 @@ let SETTING = {
         "domain": "https://partner.viettelpost.vn",
         "price_url": "/v2/order/getPrice",
         'client_code': 'VTPFW'
+      },
+      GRAB: {
+        "domain": " https://partner-api.stg-myteksi.com/grab-express-sandbox",
+        "price_url": "/v1/deliveries/quotes",
+        'client_code': 'GRAB'
       },
     },
   }
