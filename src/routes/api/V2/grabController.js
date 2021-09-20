@@ -43,10 +43,14 @@ function grabController() {
       let checkRequest = parseInt(dataRequestDelivery.CashOnDelivery.amount) > 0 ? false : true
       let service = 'all' // với grab ko truyen service de check gia all
 
-      let from = dataRequestDelivery.origin.address
-      let to = dataRequestDelivery.destination.address
-      let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, service, from, to, dataRequestDelivery.Weight,
-        dataRequestDelivery.Length, dataRequestDelivery.Width, dataRequestDelivery.Height)
+      let from = req.body.location.sender_id
+      let to = req.body.location.receiver_id
+      let weight = dataRequestDelivery.packages[0].dimensions.weight
+      let width = dataRequestDelivery.packages[0].dimensions.width
+      let height = dataRequestDelivery.packages[0].dimensions.height
+      let depth = dataRequestDelivery.packages[0].dimensions.depth
+
+      let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, service, from, to, weight, depth, width, height)
 
       return ClientService.checkCachePrice(keyCache, checkRequest)
         .then(result => {
@@ -54,7 +58,10 @@ function grabController() {
             result.data.fromCache = true
             return result.data
           }
-          return null
+          return self.getPriceFromDelivery(req, res, dataRequestDelivery).then(results => {
+            let status = results.s ? results.s : 200
+            return res.json({s: status, data: results})
+          })
         }).then(resultCache => {
           if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
             dataRequestDelivery.token = token
