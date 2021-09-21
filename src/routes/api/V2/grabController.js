@@ -58,10 +58,7 @@ function grabController() {
             result.data.fromCache = true
             return result.data
           }
-          return self.getPriceFromDelivery(req, res, dataRequestDelivery).then(results => {
-            let status = results.s ? results.s : 200
-            return res.json({s: status, data: results})
-          })
+          return null
         }).then(resultCache => {
           if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
             dataRequestDelivery.token = token
