@@ -43,8 +43,8 @@ function grabController() {
       let checkRequest = parseInt(dataRequestDelivery.CashOnDelivery.amount) > 0 ? false : true
       let service = 'all' // với grab ko truyen service de check gia all
 
-      let from = req.body.location.sender_id
-      let to = req.body.location.receiver_id
+      let from = req.body.data.location.sender_id
+      let to = req.body.data.location.receiver_id
       let weight = dataRequestDelivery.packages[0].dimensions.weight
       let width = dataRequestDelivery.packages[0].dimensions.width
       let height = dataRequestDelivery.packages[0].dimensions.height
