@@ -64,6 +64,11 @@ let SETTING = {
         "price_url": "/v2/order/getPrice",
         'client_code': 'VTPFW'
       },
+      AHAMOVE: {
+        "domain": "https://apistg.ahamove.com",
+        "price_url": "/v1/order/estimated_fee",
+        'client_code': "AHAMOVE"
+      },
     },
   },
   LOCAL: {
@@ -129,6 +134,11 @@ let SETTING = {
         "domain": "https://partner.viettelpost.vn",
         "price_url": "/v2/order/getPrice",
         'client_code': 'VTPFW'
+      },
+      AHAMOVE: {
+        "domain": "https://apistg.ahamove.com",
+        "price_url": "/v1/order/estimated_fee",
+        'client_code': "AHAMOVE"
       },
     },
   }
