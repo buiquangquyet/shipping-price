@@ -84,11 +84,6 @@ function AhaMoveController() {
                 dataServices.map(dataService => {
                     let dataDelivery = JSON.parse(JSON.stringify(dataService.data))
                     dataDelivery.token = req.body.token
-                    // console.log(dataDelivery)
-                    // let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataService.service, dataRequest.SENDER_WARD_ID,
-                    //     dataRequest.RECEIVER_WARD_ID, dataRequest.PRODUCT_WEIGHT, dataRequest.PRODUCT_LENGTH,
-                    //     dataRequest.PRODUCT_WIDTH, dataRequest.PRODUCT_HEIGHT, dataDelivery.promo_code)
-                    // console.log('dataDelivery', dataRequest)
                     let keyCache = self.genKeyCache(dataRequest,isTrial);
 
                     return ClientService.checkCachePrice(keyCache, true)
