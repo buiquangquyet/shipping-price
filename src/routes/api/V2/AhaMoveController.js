@@ -46,6 +46,23 @@ function AhaMoveController() {
 
                 })
             })
+        },
+
+        /**
+         * Generate keyCache
+         * @param dataDelivery
+         * @param isTrial
+         * @returns
+         */
+        genKeyCache : (dataDelivery, isTrial) => {
+            let from = dataDelivery.SENDER_LOCATION_ID;
+            let to = dataDelivery.RECEIVER_LOCATION_ID;
+            let coupon = dataDelivery.COUPON;
+            if (!dataDelivery.COUPON) {
+                coupon = 'NO_COUPON'
+            }
+            return ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.service, from,
+                to, dataDelivery.PRODUCT_WEIGHT, dataDelivery.PRODUCT_LENGTH, dataDelivery.PRODUCT_WIDTH, dataDelivery.PRODUCT_HEIGHT, coupon)
         }
     };
 
@@ -60,7 +77,7 @@ function AhaMoveController() {
             let services = req.body.services
             let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
             let dataRequest = JSON.parse(JSON.stringify(req.body.data))
-            let checkRequest = !(dataRequest.ORDER_SERVICE_ADD || dataRequest.MONEY_COLLECTION !== 0)
+            let checkRequest = true
 
             let isTrial = req.body.isTrial
             return Promise.all(
@@ -68,19 +85,11 @@ function AhaMoveController() {
                     let dataDelivery = JSON.parse(JSON.stringify(dataService.data))
                     dataDelivery.token = req.body.token
                     // console.log(dataDelivery)
-                    let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataService.service, dataRequest.SENDER_WARD_ID,
-                        dataRequest.RECEIVER_WARD_ID, dataRequest.PRODUCT_WEIGHT, dataRequest.PRODUCT_LENGTH,
-                        dataRequest.PRODUCT_WIDTH, dataRequest.PRODUCT_HEIGHT, dataDelivery.promo_code)
-                    console.log('dataDelivery', dataRequest)
-                    //====================
-                    // let service = 'default'
-                    //
-                    // let from = dataRequestDelivery.SenderDistrictId + '_' + dataRequestDelivery.SenderProvinceId
-                    // let to = dataRequestDelivery.ReceiverDistrictId + '_' + dataRequestDelivery.ReceiverProvinceId
-                    // let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, service, from, to, dataRequestDelivery.Weight,
-                    //     dataRequestDelivery.Length, dataRequestDelivery.Width, dataRequestDelivery.Height)
-                    //====================
-
+                    // let keyCache = ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataService.service, dataRequest.SENDER_WARD_ID,
+                    //     dataRequest.RECEIVER_WARD_ID, dataRequest.PRODUCT_WEIGHT, dataRequest.PRODUCT_LENGTH,
+                    //     dataRequest.PRODUCT_WIDTH, dataRequest.PRODUCT_HEIGHT, dataDelivery.promo_code)
+                    // console.log('dataDelivery', dataRequest)
+                    let keyCache = self.genKeyCache(dataRequest,isTrial);
 
                     return ClientService.checkCachePrice(keyCache, true)
                         .then(result => {
@@ -100,9 +109,13 @@ function AhaMoveController() {
             ).then(results => {
                 results.map(result => {
                     // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
-                    if (result.code && checkRequest && checkConnectRedis && !result.fromCache) {
-                        // let keyCache = self.genKeyCache(dataRequest, isTrial)
-                        // ClientService.setPriceToCache(keyCache, result, isTrial)
+                    console.log(!result.fromCache);
+                    console.log(checkConnectRedis);
+                    console.log(checkRequest);
+                    if ( checkRequest && checkConnectRedis && !result.fromCache) {
+
+                         let keyCache = self.genKeyCache(dataRequest, isTrial)
+                        ClientService.setPriceToCache(keyCache, result, isTrial)
                     }
                 })
 
@@ -111,6 +124,7 @@ function AhaMoveController() {
                 return res.json({s: 500, data: error.message})
             })
         }
+
     }
 }
 
