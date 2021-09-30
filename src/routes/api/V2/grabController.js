@@ -27,7 +27,9 @@ function grabController() {
             }
             return resolve(data)
           } else {
-            return resolve({s: 500, data: error.response.data})
+            let res = error.response.data
+            if (res.arg !== undefined) res.message = res.arg
+            return resolve({s: 500, data: res})
           }
         })
       })
