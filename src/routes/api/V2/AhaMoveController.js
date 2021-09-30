@@ -16,14 +16,7 @@ function AhaMoveController() {
          */
         getPriceFromDelivery: (req, res, dataDelivery) => {
             return new Promise((resolve, reject) => {
-                let paramaters = {
-                    token: dataDelivery.token,
-                    order_time: dataDelivery.order_time,
-                    service_id: dataDelivery.service_id,
-                    path: JSON.parse(JSON.stringify(dataDelivery.path)),
-                    payment_method: dataDelivery.payment_method
-                }
-                return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url , qs.stringify(paramaters), {
+                return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url , qs.stringify(dataDelivery), {
                 }).then(response => {
                     response.data.serviceId = dataDelivery.service_id
                     return resolve(response.data)
@@ -50,19 +43,21 @@ function AhaMoveController() {
 
         /**
          * Generate keyCache
-         * @param dataDelivery
+         * @param dataRequest
          * @param isTrial
+         * @param dataDelivery
          * @returns
          */
-        genKeyCache : (dataDelivery, isTrial) => {
-            let from = dataDelivery.SENDER_LOCATION_ID;
-            let to = dataDelivery.RECEIVER_LOCATION_ID;
-            let coupon = dataDelivery.COUPON;
-            if (!dataDelivery.COUPON) {
+        genKeyCache : (dataRequest, isTrial, dataDelivery) => {
+            let from = dataRequest.SENDER_LOCATION_ID+'_'+dataRequest.SENDER_WARD_ID
+            let to = dataRequest.RECEIVER_LOCATION_ID+'_'+dataRequest.RECEIVER_WARD_ID
+            let coupon = dataRequest.COUPON;
+            if (!dataRequest.COUPON) {
                 coupon = 'NO_COUPON'
             }
-            return ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, dataDelivery.service, from,
-                to, dataDelivery.PRODUCT_WEIGHT, dataDelivery.PRODUCT_LENGTH, dataDelivery.PRODUCT_WIDTH, dataDelivery.PRODUCT_HEIGHT, coupon)
+            let serviceId = dataDelivery.service_id ? dataDelivery.service_id : dataDelivery.serviceId
+            return ClientService.genKeyCache(isTrial, self.INFO_DELIVERY.client_code, serviceId, from,
+                to, dataRequest.PRODUCT_WEIGHT, dataRequest.PRODUCT_LENGTH, dataRequest.PRODUCT_WIDTH, dataRequest.PRODUCT_HEIGHT, coupon)
         }
     };
 
@@ -74,18 +69,17 @@ function AhaMoveController() {
          * @returns
          */
         getPrice: async (req, res) => {
-            let services = req.body.services
             let dataServices = req.body.dataServices || [] //extra field when udpate check price with weight exchange
             let dataRequest = JSON.parse(JSON.stringify(req.body.data))
             let checkRequest = true
 
             let isTrial = req.body.isTrial
+            console.log('isTrial', isTrial)
             return Promise.all(
                 dataServices.map(dataService => {
                     let dataDelivery = JSON.parse(JSON.stringify(dataService.data))
                     dataDelivery.token = req.body.token
-                    let keyCache = self.genKeyCache(dataRequest,isTrial);
-
+                    let keyCache = self.genKeyCache(dataRequest, isTrial, dataDelivery);
                     return ClientService.checkCachePrice(keyCache, true)
                         .then(result => {
                             if (result.s === 200) {
@@ -94,22 +88,20 @@ function AhaMoveController() {
                             }
                             return null
                         }).then(resultCache => {
-                            if (!resultCache) { // nếu k có cache thì sẽ gọi lên hãng
-                                console.log('xx')
+                            if (!isTrial) { // nếu k có cache thì sẽ gọi lên hãng
                                 return self.getPriceFromDelivery(req, res, dataDelivery)
+                            } else {
+                                if (!resultCache) return self.getPriceFromDelivery(req, res, dataDelivery)
                             }
+                            
                             return resultCache
                         })
                 })
             ).then(results => {
                 results.map(result => {
                     // nếu thành công thì ghi vào log - check thêm điều kiện có dvmr hay không và có hiện đang kết nối được vs redis hay không
-                    console.log(!result.fromCache);
-                    console.log(checkConnectRedis);
-                    console.log(checkRequest);
-                    if ( checkRequest && checkConnectRedis && !result.fromCache) {
-
-                         let keyCache = self.genKeyCache(dataRequest, isTrial)
+                    if (result.polyline_points && checkRequest && checkConnectRedis && !result.fromCache) {
+                         let keyCache = self.genKeyCache(dataRequest, isTrial, result)
                         ClientService.setPriceToCache(keyCache, result, isTrial)
                     }
                 })
