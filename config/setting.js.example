@@ -69,6 +69,11 @@ let SETTING = {
         "price_url": "/v1/order/estimated_fee",
         'client_code': "AHAMOVE"
       },
+      GRAB: {
+        "domain": " https://partner-api.stg-myteksi.com/grab-express",
+        "price_url": "/v1/deliveries/quotes",
+        'client_code': 'GRAB'
+      },
     },
   },
   LOCAL: {
@@ -139,6 +144,11 @@ let SETTING = {
         "domain": "https://apistg.ahamove.com",
         "price_url": "/v1/order/estimated_fee",
         'client_code': "AHAMOVE"
+      },
+      GRAB: {
+        "domain": " https://partner-api.stg-myteksi.com/grab-express-sandbox",
+        "price_url": "/v1/deliveries/quotes",
+        'client_code': 'GRAB'
       },
     },
   }

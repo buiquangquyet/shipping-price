@@ -74,7 +74,6 @@ function AhaMoveController() {
             let checkRequest = true
 
             let isTrial = req.body.isTrial
-            console.log('isTrial', isTrial)
             return Promise.all(
                 dataServices.map(dataService => {
                     let dataDelivery = JSON.parse(JSON.stringify(dataService.data))
