@@ -21,7 +21,6 @@ function AhaMoveController() {
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
-                    console.log('response.data', response.data)
                     return resolve(response.data)
                 }).catch(error => {
                     if (error.code && error.code === 'ECONNABORTED') {
