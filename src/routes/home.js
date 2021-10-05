@@ -7,6 +7,7 @@ const SPLController = require('./api/splController')
 const JTController = require('./api/jtController')
 const VNPController = require('./api/vnpController')
 const BESTController = require('./api/bestController')
+const AhaMoveController = require('./api/V2/AhaMoveController')
 
 router.post('/ghn/get-price', GHNController.getPrice)
 router.post('/vtp/get-price', VTPController.getPrice)
@@ -15,5 +16,6 @@ router.post('/spl/get-price', SPLController.getPrice)
 router.post('/jt/get-price', JTController.getPrice)
 router.post('/vnp/get-price', VNPController.getPrice)
 router.post('/best/get-price', BESTController.getPrice)
+router.post('/ahamove/get-price', AhaMoveController.getPrice)
 
 module.exports = router
