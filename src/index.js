@@ -34,7 +34,7 @@ app.use(cors(corsOptions));
 app.use('/api/v1', home);
 app.use('/api/v2', home2);
 app.use('/', (req, res) => {
-  return res.send('Router not found')
+  return res.send('Hello')
 });
 
 app.listen(Setting.IS_PRODUCTION ? Setting.PRODUCTION.PORT : Setting.LOCAL.PORT, function () {
