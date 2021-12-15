@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const Setting = require('../config/setting');
 const home = require('./routes/home');
 const home2 = require('./routes/home2');
+const checkPriceV3 = require('./routes/checkPriceV3');
 const redis = require('redis');
 
 // connect to Redis
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use('/api/v1', home);
 app.use('/api/v2', home2);
+app.use('/api/v3', checkPriceV3);
 app.use('/', (req, res) => {
   return res.send('Hello')
 });
