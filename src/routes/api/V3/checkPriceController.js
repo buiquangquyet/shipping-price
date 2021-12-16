@@ -1,10 +1,6 @@
-const Setting = require('../../../../config/setting')
-const axios = require('../../client')
 const baseService = require('./services/baseService')
-const vnpService = require('./services/vnpService')
 const jtService = require('./services/jtService')
-const bestService = require('./services/bestService')
-const ahamoveService = require('./services/ahamoveService')
+const commonService = require('./services/commonService')
 
 function checkPriceController() {
     return {
@@ -16,26 +12,29 @@ function checkPriceController() {
          */
          checkPrice: (req, res) => {
             let clientCode = req.body.client_code
-
-            if(clientCode === baseService.CLIENT_CODE_JT) {
-                return jtService.checkPrice(req, res)
-            }
-
-            if(clientCode === baseService.CLIENT_CODE_BEST) {
-                return bestService.checkPrice(req, res)
-            }
-
-            if(clientCode === baseService.CLIENT_CODE_AHAMOVE) {
-                return ahamoveService.checkPrice(req, res)
-            }
-
             let services = req.body.data
 
-            if(clientCode === baseService.CLIENT_CODE_VNP) {
-                return vnpService.checkPrice(req, res, services)
+            if(clientCode === baseService.CLIENT_CODE_AHAMOVE || clientCode === baseService.CLIENT_CODE_VNP) {
+                return commonService.checkPrice(req, res, services)
             }
 
-            return baseService.checkPrice(req, res, services)
+            return Promise.all(
+                services.map(service => {
+                    if(clientCode === baseService.CLIENT_CODE_JT) {
+                        return jtService.getPriceFromDelivery(req, res, service)
+                    }
+                    if(clientCode === baseService.CLIENT_CODE_BEST) {
+                        return commonService.getPriceFromDelivery(req, res, service)
+                    }
+                    //GRAB, GHN, EMS
+                    return baseService.getPriceFromDelivery(req, res, service)
+                })
+                ).then(results => {
+                    let status = baseService.prepareStatus(results);
+                    return res.json({s: status, data: results})
+                }).catch(error => {
+                    return res.json({s: 500, data: error.message})
+                })
             
         }
     }

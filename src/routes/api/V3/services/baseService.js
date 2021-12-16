@@ -29,44 +29,52 @@ const baseService = {
             headers: headers
         }).then(response => {
           if(serviceId !== '') {
-              response.data.serviceId = serviceId
+            response.data.serviceId = serviceId
           }
-          return resolve(response.data)
+          return resolve({s: 200 ,data: response.data})
         }).catch(error => {
-          if (error.code && error.code === 'ECONNABORTED') {
-              let msgErr = 'Không thể kết nối đến máy chủ của hãng'
-              if (error.message !== undefined && error.message.length > 0) {
-                  msgErr = error.message;
-              }
-              let data = {
-                  code: false,
-                  serviceId: serviceId,
-                  msg: msgErr
-              }
-              return resolve({s: 504, data: data})
-          } 
-          if(error.response) {
-              let status = 500
-              if(error.response.request.res.statusCode) {
-                  status = error.response.request.res.statusCode
-              }
-              return resolve({s: status, data: error.response.data})
-          }
-          return reject(error)
-            
+            return baseService.prepareDataError(resolve, reject, error)
         }) 
     })
   },
-  checkPrice:(req, res, services) => {
-    return Promise.all(
-      services.map(service => {
-          return baseService.getPriceFromDelivery(req, res, service)
-      })
-    ).then(results => {
-        return res.json({s: 200, data: results})
-    }).catch(error => {
-        return res.json({s: 500, data: error.message})
+  prepareStatus: (results) => {
+    let status = 200;
+    results.forEach(function(result, index) {
+        if(index == 0) {
+            status = result.s
+        }
     })
+    return status
+  },
+  prepareDataError: (resolve, reject, error) => {
+    let msgErr = 'Không thể kết nối đến máy chủ của hãng'
+    let data = {
+        message: msgErr,
+    }
+    if (error.code && error.code === 'ECONNABORTED') {
+        if (error.message !== undefined && error.message.length > 0) {
+          data.message = error.message;
+        }
+        return resolve({s: 504, data: data})
+    } 
+    let status = 500
+    if(error.response) {
+        let data = error.response.data
+        if(data.length == 0) {
+            data = {
+                message: msgErr,
+            }
+            return resolve({s: status, data: data})
+        }
+        if(error.response.request.res.statusCode) {
+            status = error.response.request.res.statusCode
+        }
+        if(data.message === undefined || data.message.length == 0) {
+          data.message = msgErr
+        }
+        return resolve({s: status, data: data})
+    }
+    return reject(error)
   }
 }
 
