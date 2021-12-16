@@ -1,22 +1,12 @@
 const axios = require('../../../client')
-const md5 = require('md5');
-const baseService = require('./baseService')
-const formUrlEncoded = x =>
-  Object.keys(x).reduce((p, c) => p + `&${c}=${encodeURIComponent(x[c])}`, '')
 
-const jtService = {
+const bestService = {
     getPriceFromDelivery: (req, res, service) => {
-      let productInfo = req.body.data.product_info
-      let dataDelivery = jtService.prepareDataToDelivery(service, productInfo)
       let serviceId = service.service
-      let headers = req.body.headers
       let domain = req.body.domain
       return new Promise((resolve, reject) => {
-          return axios.post(domain, formUrlEncoded(dataDelivery), {
-              headers: headers
-          }).then(response => {
-              response.data.responseitems[0].serviceId = serviceId
-              return resolve(response.data)
+          return axios.post(domain, service).then(response => {
+            return resolve(response.data)
           }).catch(error => {
               if (error.code && error.code === 'ECONNABORTED') {
                   let msgErr = 'Không thể kết nối đến máy chủ của hãng'
@@ -42,26 +32,11 @@ const jtService = {
           }) 
       })
     },
-    getDataDigest: (logisticInterface, apiKey) => {
-      let string = logisticInterface + apiKey
-      var hash = md5(string)
-      return Buffer.from(hash).toString('base64')
-    },
-    prepareDataToDelivery: (service, productInfo) => {
-      let logisticsInterface = JSON.parse(service.logistics_interface)
-      logisticsInterface.producttype = service.service
-      return {
-        msg_type: service.msg_type,
-        eccompanyid: service.eccompanyid,
-        logistics_interface: JSON.stringify(logisticsInterface),
-        data_digest: jtService.getDataDigest(JSON.stringify(logisticsInterface), productInfo.api_key)
-      }
-    },
     checkPrice:(req, res) => {
-      let services = req.body.data.data
+      let services = req.body.data
       return Promise.all(
         services.map(service => {
-            return jtService.getPriceFromDelivery(req, res, service)
+            return bestService.getPriceFromDelivery(req, res, service)
         })
       ).then(results => {
           return res.json({s: 200, data: results})
@@ -71,4 +46,4 @@ const jtService = {
     }
 }
 
-module.exports = jtService
+module.exports = bestService

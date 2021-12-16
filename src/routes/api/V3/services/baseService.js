@@ -3,30 +3,31 @@ const axios = require('../../../client')
 const baseService = {
   CLIENT_CODE_VNP: 'VNP',
   CLIENT_CODE_JT: 'J&T',
+  CLIENT_CODE_BEST: 'BEST',
+  CLIENT_CODE_AHAMOVE: 'AHAMOVE',
   TYPE_SINGLE: 'SINGLE',
   TYPE_MULTIPLE: 'MULTIPLE',
   /**
    * Call API to delivery
    * @param req
    * @param res
-   * @param dataDelivery
+   * @param service
    * @returns
    */
-  getPriceFromDelivery: (req, res, dataDelivery) => {
+  getPriceFromDelivery: (req, res, service) => {
     let headers = req.body.headers
     let domain = req.body.domain
     let serviceId = ''
-    if(dataDelivery.service) {
-        serviceId = dataDelivery.service
+    if(service.service) {
+        serviceId = service.service
     } 
-    if(dataDelivery.service_type_id) {
-        serviceId = dataDelivery.service_type_id
+    if(service.service_type_id) {
+        serviceId = service.service_type_id
     }
     return new Promise((resolve, reject) => {
-        return axios.post(domain, dataDelivery, {
+        return axios.post(domain, service, {
             headers: headers
         }).then(response => {
-          response.data.code = true
           if(serviceId !== '') {
               response.data.serviceId = serviceId
           }
