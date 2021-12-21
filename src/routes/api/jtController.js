@@ -11,6 +11,7 @@ function jtController() {
     FROM_CACHE: false,
 
     getPriceFromDelivery: (req, res, dataRequest, serviceId) => {
+      
       return new Promise((resolve, reject) => {
         return axios.post(self.INFO_DELIVERY.domain + self.INFO_DELIVERY.price_url, formUrlEncoded(dataRequest), {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
