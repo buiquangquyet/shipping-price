@@ -26,6 +26,9 @@ function checkPriceController() {
                     if(clientCode === baseService.CLIENT_CODE_BEST) {
                         return commonService.getPriceFromDelivery(req, res, service)
                     }
+                    if(clientCode === baseService.CLIENT_CODE_VTP) {
+                        service = JSON.parse(JSON.stringify(service.data))
+                    }
                     //GRAB, GHN, EMS
                     return baseService.getPriceFromDelivery(req, res, service)
                 })

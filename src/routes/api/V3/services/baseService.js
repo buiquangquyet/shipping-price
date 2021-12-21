@@ -5,6 +5,7 @@ const baseService = {
   CLIENT_CODE_JT: 'J&T',
   CLIENT_CODE_BEST: 'BEST',
   CLIENT_CODE_AHAMOVE: 'AHAMOVE',
+  CLIENT_CODE_VTP: 'VTP',
   TYPE_SINGLE: 'SINGLE',
   TYPE_MULTIPLE: 'MULTIPLE',
   /**
@@ -23,6 +24,10 @@ const baseService = {
     } 
     if(service.service_type_id) {
         serviceId = service.service_type_id
+    }
+     //--------- PREPARE VTP ---------
+    if(service.ORDER_SERVICE) {
+      serviceId = service.ORDER_SERVICE
     }
     return new Promise((resolve, reject) => {
         return axios.post(domain, service, {
