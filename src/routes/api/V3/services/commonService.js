@@ -9,7 +9,7 @@ const commonService = {
             return axios.post(domain, services, {
                 headers: headers
             }).then(response => {
-                return resolve({s: 200 ,data: response.data})
+                return resolve(response.data)
             }).catch(error => {
                 return baseService.prepareDataError(resolve, reject, error)
             }) 
@@ -18,8 +18,8 @@ const commonService = {
     checkPrice:(req, res, services) => {
         return commonService.getPriceFromDelivery(req, res, services)
             .then(results => {
-                let status = results.s ? results.s : 500
-                return res.json({s: status, data: results.data});
+                let status = results.s ? results.s : 200
+                return res.json({s: status, data: results});
         })
     }
 }

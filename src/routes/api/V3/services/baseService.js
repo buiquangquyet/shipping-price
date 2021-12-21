@@ -31,7 +31,7 @@ const baseService = {
           if(serviceId !== '') {
             response.data.serviceId = serviceId
           }
-          return resolve({s: 200 ,data: response.data})
+          return resolve(response.data)
         }).catch(error => {
             return baseService.prepareDataError(resolve, reject, error)
         }) 
@@ -41,7 +41,7 @@ const baseService = {
     let status = 200;
     results.forEach(function(result, index) {
         if(index == 0) {
-            status = result.s
+            status = result.s ? result.s : 500
         }
     })
     return status

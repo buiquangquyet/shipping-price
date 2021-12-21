@@ -30,8 +30,7 @@ function checkPriceController() {
                     return baseService.getPriceFromDelivery(req, res, service)
                 })
                 ).then(results => {
-                    let status = baseService.prepareStatus(results);
-                    return res.json({s: status, data: results})
+                    return res.json({s: 200, data: results})
                 }).catch(error => {
                     return res.json({s: 500, data: error.message})
                 })

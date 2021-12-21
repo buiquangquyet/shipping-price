@@ -13,7 +13,7 @@ const jtService = {
               headers: headers
           }).then(response => {
               response.data.responseitems[0].serviceId = serviceId
-              return resolve({s: 200 ,data: response.data})
+              return resolve(response.data)
           }).catch(error => {
             return baseService.prepareDataError(resolve, reject, error)
               
